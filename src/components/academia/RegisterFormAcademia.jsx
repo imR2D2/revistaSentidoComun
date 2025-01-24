@@ -46,15 +46,16 @@ const RegisterFormAcademia = (props) => {
     enableReinitialize: false,
     onSubmit: async (values, actions) => {
       setIsSubmitting(true);
-      try {
-        await setData(values);
-        actions.resetForm();
-        onClose(false);
-      } catch (error) {
-        console.error("Error al registrar datos:", error.message);
-      } finally {
-        setIsSubmitting(false);
-      }
+      console.log(values, 'values')
+      // try {
+      //   await setData(values);
+      //   actions.resetForm();
+      //   onClose(false);
+      // } catch (error) {
+      //   console.error("Error al registrar datos:", error.message);
+      // } finally {
+      //   setIsSubmitting(false);
+      // }
     },
   });
 
@@ -285,7 +286,23 @@ const RegisterFormAcademia = (props) => {
             <UploadSingleFile
               file={formik.values.Files && formik.values.Files.length > 0 ? formik.values.Files[0].file : params.imagePath}
               setFile={handleFiles}
+              fileType="image"
               accept="image/*"
+            />
+
+            <FormHelperText id="RichTextEditor" error={Boolean(formik.touched.files && formik.errors.files)}>
+              {formik.touched.Files && formik.errors?.Files && formik.errors.Files[0]?.file}
+            </FormHelperText>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={2} mt={2} justifyContent="center">
+          <Grid item xs={8}>
+            <UploadSingleFile
+              file={formik.values.Files && formik.values.Files.length > 0 ? formik.values.Files[0].file : params.imagePath}
+              setFile={handleFiles}
+              fileType="pdf"
+              accept="application/pdf"
             />
 
             <FormHelperText id="RichTextEditor" error={Boolean(formik.touched.files && formik.errors.files)}>

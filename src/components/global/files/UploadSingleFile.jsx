@@ -1,6 +1,7 @@
 import { isString } from "lodash";
 import { useDropzone } from "react-dropzone";
-import UploadImage from "@assets/img/upload_files.svg";
+import UploadImage from "@assets/img/ic_img.svg";
+import UploadPdf from "@assets/img/ic_pdf.svg";
 
 // material
 import { Box, Typography, styled } from "@mui/material";
@@ -29,14 +30,13 @@ const DropZoneStyle = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const UploadSingleFile = ({ file, setFile, sx, ...other }) => {
-
+const UploadSingleFile = ({ file, setFile, fileType, sx, ...other }) => {
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file) {
       setFile(Object.assign(file, {
         preview: URL.createObjectURL(file)
-      }))
+      }));
     }
   };
 
@@ -44,8 +44,12 @@ const UploadSingleFile = ({ file, setFile, sx, ...other }) => {
     useDropzone({
       multiple: false,
       onDrop,
+      accept: fileType === "pdf" ? "application/pdf" : "image/*",  // Aquí controlas el tipo de archivo
       ...other,
     });
+
+  // Define los íconos según el tipo de archivo
+  const fileIcon = fileType === "pdf" ? UploadPdf : UploadImage;
 
   return (
     <Box sx={{ width: "100%", ...sx }}>
@@ -65,18 +69,18 @@ const UploadSingleFile = ({ file, setFile, sx, ...other }) => {
 
         <Box
           component="img"
-          alt="avatar upload"
-          src={UploadImage}
+          alt="file upload"
+          src={fileIcon}
           width={140}
         />
 
         <Box sx={{ p: 3, ml: { md: 2 } }}>
           <Typography gutterBottom variant="h5">
-            Arrastre o seleccione la imagen
+            {fileType === "pdf" ? "Arrastre o seleccione un PDF" : "Arrastre o seleccione la imagen"}
           </Typography>
 
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            Coloque la imagen aquí o haga click en&nbsp;
+            Coloque el archivo aquí o haga click en&nbsp;
             <Typography
               variant="body2"
               component="span"
@@ -97,10 +101,9 @@ const UploadSingleFile = ({ file, setFile, sx, ...other }) => {
               sx={{
                 top: 8,
                 borderRadius: 1,
-                //objectFit: "cover",
                 position: "absolute",
-                width: "calc(100% - 16px)", //calc(100% - 16px),
-                height: "calc(100% - 16px)", //calc(100% - 16px)
+                width: "calc(100% - 16px)",
+                height: "calc(100% - 16px)",
               }}
             />
           </>
