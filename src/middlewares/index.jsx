@@ -7,6 +7,7 @@ import AnimatedTransition from "@router/AnimatedTransition";
 import NotAuthorized from "@pages/auth/NotAuthorized";
 
 // Componentes
+import Navbar from "@global/layout/Navbar";
 
 // Middlewares y utils
 import { getValidToken, checkMenuAccess } from "@middlewares/middleware";
@@ -23,6 +24,7 @@ export const Public = ({ page, title = "" }) => {
   document.title = title;
   return (
     <>
+      <Navbar title="Inicio" />
       <AnimatedTransition>{page ?? <></>}</AnimatedTransition>
     </>
   );
@@ -38,6 +40,7 @@ export const PublicWithDynamicTitle = ({ page, title}) => {
 
   return (
     <>
+      <Navbar title="Inicio" />
       <AnimatedTransition>{page ?? <></>}</AnimatedTransition>
     </>
   );
@@ -51,6 +54,7 @@ export const ProtectedRoute = ({ page, title = "" }) => {
   document.title = title;
   return (
     <>
+      <Navbar handleToggle={handleToggle} title="Inicio" />
       <AnimatedTransition sx={margins}>{page ?? <></>}</AnimatedTransition>
     </>
   );
@@ -65,6 +69,7 @@ export const PrivilegedRoute = ({ page, title = "" }) => {
   document.title = title;
   return (
     <>
+      <Navbar handleToggle={handleToggle} title="Inicio" />
       <AnimatedTransition sx={margins}>{page ?? <NotAuthorized />}</AnimatedTransition>
     </>
   );
