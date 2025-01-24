@@ -42,12 +42,7 @@ const Navbar = () => {
 
   const perfil = [
     { image: true, title: "Logotipo", action: () => clickItem("/") },
-    { title: "Inicio", icon: <Home />, action: () => clickItem("/", "Inicio") },
-    { title: "Academia", icon: <Newspaper />, action: () => clickItem("/academia", "") },
-    { title: "Servicios", icon: <DesignServices />, action: () => clickItem("/", "Services") },
-    { title: "Quiénes somos", icon: <HelpCenter />, action: () => clickItem("/", "AboutUs") },
-    { title: "Nuestro Equipo", icon: <Groups />, action: () => clickItem("/", "Team") },
-    { title: "Contacto", icon: <Phone />, action: () => clickItem("/", "Contacto") },
+    { title: "Academia", icon: <Newspaper />, action: () => clickItem("/academia", "") },    
   ];
 
   return (
