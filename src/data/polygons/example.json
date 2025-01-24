@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": 1,
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [-101.068990456315, 20.8748245089978],
+              [-101.057369890965, 20.8796958905126],
+              [-101.068437453671, 20.8750781805647],
+              [-101.068990456315, 20.8748245089978]
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "shp": "dfed",
+        "color": "#0066FF",
+        "line_color": "#ffffff",
+        "latitud": 21.2829898911,
+        "longitud": -100.418156737169
+      }
+    }
+  ]
+}

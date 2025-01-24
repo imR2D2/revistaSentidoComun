@@ -1,0 +1,6 @@
+.ql-container {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji" !important;
+    border: 1px solid #ccc; /* Estilo de borde */
+    border-radius: 4px; /* Bordes redondeados opcionales */
+}
