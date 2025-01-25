@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 // Material UI
@@ -30,6 +30,24 @@ import defaultImage from "@assets/image_example.jpg";
 // Helpers Firebase
 import { getDataByTitleAndId } from "@utils/firebase/firebaseHelpers";
 import { AuthorsSelect } from "@data/constants/academia";
+
+import HTMLFlipBook from 'react-pageflip';
+import { Document, Page, pdfjs } from 'react-pdf';
+import pdf from './ByteBeatJan2024.pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+
+const Pages = React.forwardRef((props, ref) => {
+  return (
+      <div className="demoPage" ref={ref} >
+          <p>{props.children}</p>
+          <p>Page number: {props.number}</p>
+      </div>
+  );
+});
+
+Pages.displayName = 'Pages';
 
 const TemplateAcademia = () => {
   const { titleURL } = useParams();
@@ -92,6 +110,12 @@ const TemplateAcademia = () => {
     return option ? option.label : "Sin responsable";
   };
 
+  const [numPages, setNumPages] = useState();
+
+  function onDocumentLoadSuccess({ numPages }) {
+      setNumPages(numPages);
+  }
+
   return (
     <>
       <Container maxWidth="xl" sx={{ mt: 10 }}>
@@ -100,6 +124,21 @@ const TemplateAcademia = () => {
             <Icon>arrow_back</Icon>
           </IconButton>
         </Box>
+
+        <HTMLFlipBook width={400} height={570}>
+          {
+            [...Array(numPages).keys()].map((pNum) => (
+              <Pages key={pNum} number={pNum + 1}>
+                <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+                  <Page pageNumber={pNum} width={400} renderAnnotationLayer={false} renderTextLayer={false} />
+                </Document>
+                <p>
+                  Page {pNum} of {numPages}
+                </p>
+              </Pages>
+            ))
+          }
+        </HTMLFlipBook>
 
         {isLoading ? (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
@@ -200,7 +239,7 @@ const TemplateAcademia = () => {
             </Box>
 
             <Box sx={{ mt: -2 }}>
-            {!isLoading && educationHistory.length && (
+              {!isLoading && educationHistory.length && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
                   {educationHistory.map((item, index) => (
                     <IconButton key={index} onClick={() => handleSocialClick(item.name)}>
