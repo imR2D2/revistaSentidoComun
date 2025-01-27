@@ -63,16 +63,16 @@ const YearsButtons = ({
             variant="outlined"
             onClick={() => localHandleClick(item)}
             sx={{
-              borderColor: "rgb(0,108,186)",
-              borderRadius: "100px",
-              color: "rgb(0,108,186)",
+              borderColor: "rgb(0,96,107)",
+              borderRadius: "12px",
+              color: "rgb(0,96,107)",
               fontWeight: 600,
               px: 3,
-              py: 1,
+              py: .6,
               ...(item === localYear
-                ? { backgroundColor: "rgb(0,108,186)", color: "#fff", borderColor: "rgb(0,108,186)" }
+                ? { backgroundColor: "rgb(0,96,107)", color: "#fff", borderColor: "rgb(0,96,107)" }
                 : {}),
-              "&:hover": { backgroundColor: "rgb(0,108,186)", color: "#fff", borderColor: "rgb(0,108,186)" },
+              "&:hover": { backgroundColor: "rgb(0,96,107)", color: "#fff", borderColor: "rgb(0,96,107)" },
             }}
           >
             {item}
@@ -97,20 +97,20 @@ const YearsButtons = ({
               variant="outlined"
               onClick={() => localHandleClick(localYear, index + 1)} // Meses son de 1 a 12
               sx={{
-                borderColor: "rgb(0,108,186)",
-                borderRadius: "100px",
-                color: "rgb(0,108,186)",
+                borderColor: "rgb(0,96,107)",
+                borderRadius: "12px",
+                color: "rgb(0,96,107)",
                 fontWeight: 600,
                 fontSize: 10,
                 px: 3,
-                py: 1,
+                py: .5,
                 ...(index + 1 === localMonth
-                  ? { backgroundColor: "rgb(0,108,186)", color: "#fff", borderColor: "rgb(0,108,186)" }
+                  ? { backgroundColor: "rgb(0,96,107)", color: "#fff", borderColor: "rgb(0,96,107)" }
                   : {}),
                 "&:hover": {
-                  backgroundColor: "rgb(0,108,186)",
+                  backgroundColor: "rgb(0,96,107)",
                   color: "#fff",
-                  borderColor: "rgb(0,108,186)",
+                  borderColor: "rgb(0,96,107)",
                 },
               }}
             >

@@ -45,11 +45,11 @@ const FilterCollapse = ({
               width: "32px",
               height: "32px",
               backgroundColor: checked ? "none" : "rgba(0, 0, 0, 0.04)",
-              border: checked ? "1px solid #0041a0" : "none",
+              border: checked ? "1px solid rgb(0,96,107)" : "rgb(0,96,107)",
               borderRadius: "20%",
             }}
           >
-            <Icon sx={{ color: checked && "#0041a0" }}>
+            <Icon sx={{ color: checked && "rgb(0,96,107)" }}>
               {checked
                 ? "keyboard_double_arrow_up"
                 : "keyboard_double_arrow_down"}
@@ -59,7 +59,7 @@ const FilterCollapse = ({
           <Typography
             variant="subtitle2"
             fontWeight={700}
-            color={checked && "#0041a0"}
+            color={checked && "rgb(0,96,107)"}
           >
             FILTROS
           </Typography>
