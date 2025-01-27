@@ -16,8 +16,6 @@ import { generarURL } from "@utils/utilities";
 // Helpers Firebase
 import { uploadDataToFirebase } from '@utils/firebase/firebaseHelpers';
 
-
-
 const RegisterAcademia = () => {
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,6 +23,7 @@ const RegisterAcademia = () => {
 
   const handleInsertData = async (values) => {
     const File = values?.Files[0]?.file;
+    const FilePdf = values?.FilesPdf[0]?.file;
     const FullName = values?.FullName;
     const ShortDescription = values?.ShortDescription;
     const Location = values?.Ubicacion;
@@ -41,7 +40,7 @@ const RegisterAcademia = () => {
     const Day = date.getDate();
     const EducationHistory = values?.EducationHistory
     try {
-      const result = await uploadDataToFirebase(File, FullName, ShortDescription, Location, Year, Month, Day, Link, Responsibility, Title, TitleURL, Content, DateValue, EducationHistory);
+      const result = await uploadDataToFirebase(File, FilePdf, FullName, ShortDescription, Location, Year, Month, Day, Link, Responsibility, Title, TitleURL, Content, DateValue, EducationHistory);
 
       if (result.success) {
         showSnackbar({

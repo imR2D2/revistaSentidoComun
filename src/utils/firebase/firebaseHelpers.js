@@ -5,18 +5,26 @@ import { v4 as uuidv4 } from 'uuid';
 import { query, where, orderBy } from 'firebase/firestore';
 
 // Función para subir datos a Firebase
-export const uploadDataToFirebase = async (File, FullName, ShortDescription, Location, Year, Month, Day, Link, Responsibility, Title, TitleURL, Content, DateValue, EducationHistory) => {
+export const uploadDataToFirebase = async (File, FilePdf, FullName, ShortDescription, Location, Year, Month, Day, Link, Responsibility, Title, TitleURL, Content, DateValue, EducationHistory) => {
     const imgs = ref(imgDB, `Imgs/${uuidv4()}`);
+    const pdfs = ref(imgDB, `Pdfs/${uuidv4()}`);
+
     try {
+        // Subir imagen a Firebase Storage
         const snapshot = await uploadBytes(imgs, File);
         const downloadURL = await getDownloadURL(snapshot.ref);
 
+        // Subir PDF a Firebase Storage
+        const snapshotPdf = await uploadBytes(pdfs, FilePdf);
+        const downloadURLPdf = await getDownloadURL(snapshotPdf.ref);
+
         // console.log({"downloadURL": downloadURL}, {"FullName": FullName}, {"ShortDescription": ShortDescription}, {"Location": Location}, {"Year": Year}, {"Month": Month}, {"Day": Day}, {"Link": Link}, {"Responsibility": Responsibility}, {"Title": Title}, {"TitleURL": TitleURL}, {"Content": Content}, {"DateValue": DateValue}, {"EducationHistory": EducationHistory});
 
-        if (downloadURL) {
+        if (downloadURL && downloadURLPdf) {
             const valRef = collection(txtDB, 'c27_blog');
             await addDoc(valRef, {
                 imageFile: downloadURL,
+                pdfFile: downloadURLPdf,
                 title: Title,
                 titleURL: TitleURL,
                 shortDescription: ShortDescription,
