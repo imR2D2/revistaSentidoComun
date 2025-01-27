@@ -82,10 +82,10 @@ const RegisterFormAcademia = (props) => {
   const handleUbicacion = handleInputChange("Ubicacion");
   const handleLink = handleInputChange("Link");
 
-  const handleFiles = (e) => {
+  const handleFiles = (e, fieldName) => {
     formik.setValues((prev) => ({
       ...prev,
-      Files: [{ file: e }],
+      [fieldName]: [{ file: e }],
     }));
   };
 
@@ -285,7 +285,7 @@ const RegisterFormAcademia = (props) => {
           <Grid item xs={8}>
             <UploadSingleFile
               file={formik.values.Files && formik.values.Files.length > 0 ? formik.values.Files[0].file : params.imagePath}
-              setFile={handleFiles}
+              setFile={(e) => handleFiles(e, "Files")}
               fileType="image"
               accept="image/*"
             />
@@ -299,8 +299,8 @@ const RegisterFormAcademia = (props) => {
         <Grid container spacing={2} mt={2} justifyContent="center">
           <Grid item xs={8}>
             <UploadSingleFile
-              file={formik.values.Files && formik.values.Files.length > 0 ? formik.values.Files[0].file : params.imagePath}
-              setFile={handleFiles}
+              file={formik.values.FilesPdf && formik.values.FilesPdf.length > 0 ? formik.values.FilesPdf[0].file : params.imagePath}
+              setFile={(e) => handleFiles(e, "FilesPdf")}
               fileType="pdf"
               accept="application/pdf"
             />
