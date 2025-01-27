@@ -142,6 +142,7 @@ const TableAcademia = (props) => {
     try {
       setLoading(true);
       const response = await getData();
+      console.log(response, 'response')
 
       if (response.success) {
         const mappedData = response.data.map((item) => {
@@ -176,6 +177,28 @@ const TableAcademia = (props) => {
                 </a>
               </WhiteTooltip>
             ),
+            pdfFileHover: (
+              <WhiteTooltip
+              title={
+                item.pdfFile ? (
+                  <embed
+                    src={item.pdfFile}
+                    type="application/pdf"
+                    style={{ maxWidth: 200, maxHeight: 200 }}
+                  />
+                ) : (
+                  <span>Archivo no disponible</span>
+                )
+              }
+              
+                placement="right"
+              >
+                <a href={item.pdfFile} target="_blank" rel="noopener noreferrer">
+                  {item.pdfFile}
+                </a>
+              </WhiteTooltip>
+            ),
+            
           };
         });
 
