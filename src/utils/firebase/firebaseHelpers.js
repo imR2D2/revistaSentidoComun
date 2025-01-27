@@ -47,11 +47,21 @@ export const uploadDataToFirebase = async (File, FilePdf, FullName, ShortDescrip
 };
 
 // Función para obtener todos los datos
-export const getData = async () => {
+export const getData = async (year, month) => {
     try {
         const valRef = collection(txtDB, 'c27_blog');
 
-        const q = query(valRef, orderBy("date", "desc"));
+        // Filtramos por el año y mes si se pasan como parámetros
+        let q = query(valRef, orderBy("date", "desc"));
+        
+        if (year) {
+            q = query(q, where("year", "==", year));
+        }
+
+        if (month) {
+            q = query(q, where("month", "==", month));
+        }
+
         const dataDB = await getDocs(q);
 
         const allData = dataDB.docs.map(val => ({ ...val.data(), id: val.id }));
@@ -60,6 +70,7 @@ export const getData = async () => {
         return { success: false, message: error.message };
     }
 };
+
 
 // Función para obtener datos por ID
 export const getDataById = async (id) => {
