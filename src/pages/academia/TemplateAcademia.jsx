@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { CalendarToday as CalendarTodayIcon, Person as PersonIcon, Place as Place } from '@mui/icons-material';
 import { Email, Facebook, X, Instagram, YouTube, Telegram, Language, Reddit } from "@mui/icons-material";
+import { ArrowBack, ArrowForward, Download as DownloadIcon } from "@mui/icons-material";
 
 // Components
 import NotFound from "@global/text/NotFound";
@@ -33,23 +34,27 @@ import { AuthorsSelect } from "@data/constants/academia";
 
 import HTMLFlipBook from 'react-pageflip';
 import { Document, Page, pdfjs } from 'react-pdf';
-import pdf from './ByteBeatJan2024.pdf';
+import pdf from './prueba.pdf';
+import useWindowDimensions from '@hooks/useWindowDimensions';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 
 const Pages = React.forwardRef((props, ref) => {
   return (
-      <div className="demoPage" ref={ref} >
-          <p>{props.children}</p>
-          <p>Page number: {props.number}</p>
-      </div>
+    <div className="demoPage" ref={ref} >
+      <p>{props.children}</p>
+      <p>Page number: {props.number}</p>
+    </div>
   );
 });
 
 Pages.displayName = 'Pages';
 
 const TemplateAcademia = () => {
+  const { width } = useWindowDimensions();
+  console.log(width)
+
   const { titleURL } = useParams();
   const navigate = useNavigate();
   const locations = useLocation();
@@ -113,7 +118,7 @@ const TemplateAcademia = () => {
   const [numPages, setNumPages] = useState();
 
   function onDocumentLoadSuccess({ numPages }) {
-      setNumPages(numPages);
+    setNumPages(numPages);
   }
 
   return (
@@ -125,20 +130,44 @@ const TemplateAcademia = () => {
           </IconButton>
         </Box>
 
-        <HTMLFlipBook width={400} height={570}>
-          {
-            [...Array(numPages).keys()].map((pNum) => (
-              <Pages key={pNum} number={pNum + 1}>
-                <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-                  <Page pageNumber={pNum} width={400} renderAnnotationLayer={false} renderTextLayer={false} />
-                </Document>
-                <p>
-                  Page {pNum} of {numPages}
-                </p>
-              </Pages>
-            ))
-          }
-        </HTMLFlipBook>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2 }}>
+          <HTMLFlipBook width={width > 500 ? 400 : 200} height={width > 500 ? 600 : 300}>
+            {
+              [...Array(numPages).keys()].map((pNum) => (
+                <Pages key={pNum} number={pNum + 1}>
+                  <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+                    <Page pageNumber={pNum} width={width > 500 ? 400 : 200} renderAnnotationLayer={false} renderTextLayer={false} />
+                  </Document>
+                  <p>
+                    Page {pNum} of {numPages}
+                  </p>
+                </Pages>
+              ))
+            }
+          </HTMLFlipBook>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 2,
+            mt: 2,
+          }}
+        >
+          <IconButton >
+            <ArrowBack />
+          </IconButton>
+
+          <IconButton >
+            <DownloadIcon />
+          </IconButton>
+
+          <IconButton>
+            <ArrowForward />
+          </IconButton>
+        </Box>
 
         {isLoading ? (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
@@ -193,6 +222,7 @@ const TemplateAcademia = () => {
                 flexDirection: "column",
                 alignItems: 'flex-start',
                 gap: 1,
+                mt: 20,
                 width: { xs: '90%', md: '70%' },
                 margin: '0 auto'
               }}
