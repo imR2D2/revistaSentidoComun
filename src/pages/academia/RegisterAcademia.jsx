@@ -22,49 +22,60 @@ const RegisterAcademia = () => {
   const [refreshApi, setRefreshApi] = useState(false);
 
   const handleInsertData = async (values) => {
+    console.log(values);
     const File = values?.Files[0]?.file;
     const FilePdf = values?.FilesPdf[0]?.file;
     const FullName = values?.FullName;
     const ShortDescription = values?.ShortDescription;
     const Location = values?.Ubicacion;
-    const dateString = values?.date;
+    const dateString = values?.Date; // <-- Cambié a valores reales
     const Link = values?.Link;
-    const Responsibility = values?.IdResponsabilidad
-    const Title = values?.Title
-    const TitleURL = generarURL(values?.Title)
-    const Content = values?.Contenido
-    const DateValue = values?.Date
+    const Responsibility = values?.IdResponsabilidad;
+    const Title = values?.Title;
+    const TitleURL = generarURL(values?.Title);
+    const Content = values?.Contenido;
+    const EducationHistory = values?.EducationHistory;
+
+    // Validar si dateString existe y es válido
+    if (!dateString || isNaN(Date.parse(dateString))) {
+      console.error("La fecha proporcionada es inválida:", dateString);
+      return;
+    }
+
+    // Crear el objeto Date
     const date = new Date(dateString);
     const Year = date.getFullYear();
-    const Month = date.getMonth() + 1;
+    const Month = date.getMonth() + 1; // Los meses van de 0 a 11, se suma 1
     const Day = date.getDate();
-    const EducationHistory = values?.EducationHistory
-    try {
-      const result = await uploadDataToFirebase(File, FilePdf, FullName, ShortDescription, Location, Year, Month, Day, Link, Responsibility, Title, TitleURL, Content, DateValue, EducationHistory);
 
-      if (result.success) {
-        showSnackbar({
-          message: "Post creado correctamente",
-          color: "success",
-          variant: "filled",
-          vertical: "top",
-          horizontal: "center",
-        });
-        setRefreshApi(prevState => !prevState);
-        setOpenModal(false);
-      } else {
-        throw new Error(result.message);
-      }
+    console.log("Fecha procesada:", Date, Year, Month, Day);
+
+    // Lógica para subir los datos a Firebase
+    const DateValue = values?.Date; // Este valor lo puedes ajustar según lo necesites
+    try {
+      const result = await uploadDataToFirebase(
+        File,
+        FilePdf,
+        FullName,
+        ShortDescription,
+        Location,
+        Year,
+        Month,
+        Day,
+        Link,
+        Responsibility,
+        Title,
+        TitleURL,
+        Content,
+        DateValue,
+        EducationHistory
+      );
+      console.log(result);
     } catch (error) {
-      showSnackbar({
-        message: "No se pudo crear el post, intente de nuevo.",
-        color: "error",
-        variant: "filled",
-        vertical: "top",
-        horizontal: "center",
-      });
+      console.error("Error al insertar datos:", error.message);
     }
   };
+
 
   return (
     <Container maxWidth={false} sx={{ mt: 10 }}>
