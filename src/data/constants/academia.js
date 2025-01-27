@@ -35,6 +35,7 @@ export const postColumnsTable = [
   { id: "link", label: "Enlace a la Fuente Original", align: "center" },
   { id: "location", label: "Región Asociada al Post", align: "center" },
   { id: "imageFileHover", label: "Link de Imagen", align: "left" },
+  { id: 'pdfFileHover', label: 'Link de PDF', align: 'left' },
   { id: "action", label: "", align: "center" },
 ];
 

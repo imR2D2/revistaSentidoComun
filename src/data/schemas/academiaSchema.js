@@ -28,6 +28,15 @@ const FormAcademia = Yup.object().shape({
       })
     )
   ,
+  FilesPdf: Yup.array()
+    .min(1)
+    .max(1)
+    .of(
+      Yup.object().shape({
+        file: Yup.string().required("PDF es requerido"),
+      })
+    )
+  ,
   Date: Yup.date()
     .required("Fecha de Acontecimiento es requerida")
     .max(today, "La fecha no puede ser posterior al día de hoy"),
@@ -48,7 +57,7 @@ const socialNetworks = Yup.object().shape({
         .matches(/^https?:\/\//, "El link debe comenzar con http:// o https://")
         .required("El link o correo es requerido"),
     }),
-    SocialNetworksType: Yup.number().required("Tipo es requerido"),
+  SocialNetworksType: Yup.number().required("Tipo es requerido"),
 });
 
 export { FormAcademia, socialNetworks };

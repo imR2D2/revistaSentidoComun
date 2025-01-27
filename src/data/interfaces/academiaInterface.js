@@ -11,6 +11,11 @@ const formAcademiaInterface = {
       file: ""
     }
   ],
+  FilesPdf: [
+    {
+      file: ""
+    }
+  ],
   Date: null,
   EducationHistory: [
     /* { name: "", title: "", ubication: "", dateStart: "", dateEnd: "" } */
