@@ -98,7 +98,7 @@ const YearsButtons = ({
               onClick={() => localHandleClick(localYear, index + 1)} // Meses son de 1 a 12
               sx={{
                 borderColor: "rgb(0,96,107)",
-                borderRadius: "12px",
+                borderRadius: "10px",
                 color: "rgb(0,96,107)",
                 fontWeight: 600,
                 fontSize: 10,
