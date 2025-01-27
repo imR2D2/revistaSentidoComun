@@ -28,7 +28,7 @@ const RegisterAcademia = () => {
     const FullName = values?.FullName;
     const ShortDescription = values?.ShortDescription;
     const Location = values?.Ubicacion;
-    const dateString = values?.Date; // <-- Cambié a valores reales
+    const dateString = values?.Date; // Cambié a valores reales
     const Link = values?.Link;
     const Responsibility = values?.IdResponsabilidad;
     const Title = values?.Title;
@@ -50,8 +50,7 @@ const RegisterAcademia = () => {
 
     console.log("Fecha procesada:", Date, Year, Month, Day);
 
-    // Lógica para subir los datos a Firebase
-    const DateValue = values?.Date; // Este valor lo puedes ajustar según lo necesites
+    const DateValue = values?.Date;
     try {
       const result = await uploadDataToFirebase(
         File,
@@ -70,7 +69,20 @@ const RegisterAcademia = () => {
         DateValue,
         EducationHistory
       );
-      console.log(result);
+
+      if (result.success) {
+        showSnackbar({
+          message: "Post creado correctamente",
+          color: "success",
+          variant: "filled",
+          vertical: "top",
+          horizontal: "center",
+        });
+        setRefreshApi(prevState => !prevState);
+        setOpenModal(false);
+      } else {
+        throw new Error(result.message);
+      }
     } catch (error) {
       console.error("Error al insertar datos:", error.message);
     }
