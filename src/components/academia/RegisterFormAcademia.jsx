@@ -47,15 +47,15 @@ const RegisterFormAcademia = (props) => {
     onSubmit: async (values, actions) => {
       setIsSubmitting(true);
       console.log(values, 'values')
-      // try {
-      //   await setData(values);
-      //   actions.resetForm();
-      //   onClose(false);
-      // } catch (error) {
-      //   console.error("Error al registrar datos:", error.message);
-      // } finally {
-      //   setIsSubmitting(false);
-      // }
+      try {
+        await setData(values);
+        actions.resetForm();
+        onClose(false);
+      } catch (error) {
+        console.error("Error al registrar datos:", error.message);
+      } finally {
+        setIsSubmitting(false);
+      }
     },
   });
 
