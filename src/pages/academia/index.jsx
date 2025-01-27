@@ -8,6 +8,7 @@ import { es } from "date-fns/locale";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PersonIcon from '@mui/icons-material/Person';
 import { grey } from '@mui/material/colors';
+import { CircularProgress } from "@mui/material";
 
 // Navigate
 import { useNavigate } from "react-router-dom";
@@ -38,13 +39,18 @@ const Blog = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [loading, setLoading] = useState(true);
+
+  console.log(selectedYear, selectedMonth);
 
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
-      const result = await getData();
+
+      const result = await getData(selectedYear, selectedMonth);
+      console.log(result, 'datos')
+
       if (result.success) {
         setPosts(result.data);
       } else {
@@ -54,17 +60,7 @@ const Blog = () => {
     };
 
     fetchPosts();
-  }, []);
-
-  // Filtrar posts por el año y mes seleccionados
-  const filteredPosts = posts
-    .filter((post) => {
-      if (selectedMonth) {
-        return post.year === selectedYear && post.month === selectedMonth;
-      }
-      return post.year === selectedYear;
-    })
-    .filter((post) => post != null);
+  }, [selectedYear, selectedMonth]);
 
   // Filtrar posts por el año y mes seleccionados
   const getResponsableName = (idResponsabilidad) => {
@@ -96,12 +92,8 @@ const Blog = () => {
       <Fade duration={3000}>
         <>
           <Box sx={{ textAlign: "center", my: 4, px: 3 }}>
-            <Typography variant="h4" component="h2">
-              Academia
-            </Typography>
-
             <Typography variant="subtitle1" color="textSecondary">
-              Descubre las últimas noticias, textos científicos y actualizaciones de nuestro equipo
+              Explora las ediciones más recientes de nuestra revista, con artículos exclusivos, análisis profundos y las últimas tendencias en diversos campos del conocimiento. Mantente actualizado con las publicaciones de nuestros expertos y descubre contenido innovador que te mantendrá al tanto de lo más relevante.
             </Typography>
           </Box>
 
@@ -117,10 +109,10 @@ const Blog = () => {
 
           <Box sx={{ my: 4, p: 2 }}>
             {loading ? (
-              <Typography variant="h6" align="center">
-                Cargando...
-              </Typography>
-            ) : filteredPosts.length === 0 ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CircularProgress />
+              </Box>
+            ) : posts.length === 0 ? (
               <Box sx={{ textAlign: "center", my: 4 }}>
                 <NotFound
                   title={`No hay posts disponibles para el año y mes seleccionados.`}
@@ -130,7 +122,7 @@ const Blog = () => {
             ) : (
               <Grid container spacing={4}>
                 <style>{`.blog-item .react-reveal { height: 100%; } `}</style>
-                {filteredPosts?.map((post, index) => (
+                {posts?.map((post, index) => (
                   <Grid item xs={12} md={6} lg={4} key={index} className="blog-item">
                     <Fade up delay={400 + index * 50}>
                       <Card
