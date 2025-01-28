@@ -44,7 +44,6 @@ const Pages = React.forwardRef((props, ref) => {
   return (
     <div className="demoPage" ref={ref} >
       <p>{props.children}</p>
-      <p>Page number: {props.number}</p>
     </div>
   );
 });
@@ -136,11 +135,8 @@ const TemplateAcademia = () => {
               [...Array(numPages).keys()].map((pNum) => (
                 <Pages key={pNum} number={pNum + 1}>
                   <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-                    <Page pageNumber={pNum} width={width > 500 ? 400 : 200} renderAnnotationLayer={false} renderTextLayer={false} />
+                    <Page pageNumber={pNum + 1} width={width > 500 ? 400 : 200} renderAnnotationLayer={false} renderTextLayer={false} />
                   </Document>
-                  <p>
-                    Page {pNum} of {numPages}
-                  </p>
                 </Pages>
               ))
             }
