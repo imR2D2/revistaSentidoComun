@@ -129,13 +129,14 @@ const Blog = () => {
                         sx={{
                           borderRadius: 2,
                           boxShadow: "0px 4px 12px 2px rgba(0, 0, 0, 0.2)",
-                          height: "400px",
+                          height: "500px",
                           display: "flex",
                           flexDirection: "column",
+                          backgroundColor: "#f5f2f2",
                         }}
                       >
-                        <CardMedia component="img" height="200" image={post?.imageFile} alt={post?.fullName} />
-                        <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                        <CardMedia component="img" height="400" sx={{px:10, py: 1}} image={post?.imageFile} alt={post?.fullName} />
+                        <CardContent sx={{ backgroundColor: 'white', flex: 1, display: "flex", flexDirection: "column" }}>
                           <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
                             {post?.title}
                           </Typography>
@@ -153,18 +154,23 @@ const Blog = () => {
                             </Typography>
                           }
 
-
                           <Typography variant="subtitle2" gutterBottom>
                             <PersonIcon sx={{ color: grey[800], verticalAlign: 'middle', fontSize: 20, mr: 1 }} />
                             {post?.fullName || getResponsableName(post?.idResponsabilidad) || "Sin Autor"}
                           </Typography>
 
-
-                          <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                          <Typography
+                            variant="body2"
+                            color="textSecondary"
+                            sx={{
+                              mt: 1,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap'
+                            }}
+                          >
                             {post?.shortDescription}
                           </Typography>
-
-                          <Box flex={1} />
 
                           <Button size="small" sx={{ marginTop: 2 }} onClick={() => navigate(post?.titleURL, { state: { title: post?.title, id: post?.id } })}>
                             Ver más información
