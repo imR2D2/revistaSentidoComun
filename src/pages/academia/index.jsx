@@ -32,6 +32,10 @@ const getMonthName = (monthNumber) => {
   return monthObj ? monthObj[monthNumber] : "Sin mes";
 };
 
+import IconButton from '@mui/material/IconButton';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+
 const Blog = () => {
   const navigate = useNavigate();
 
@@ -123,34 +127,59 @@ const Blog = () => {
               <Grid container spacing={4}>
                 <style>{`.blog-item .react-reveal { height: 100%; } `}</style>
                 {posts?.map((post, index) => (
-                  <Grid item xs={12} md={6} lg={4} key={index} className="blog-item">
+                  <Grid item xs={12} md={12} lg={12} key={index} className="blog-item">
                     <Fade up delay={400 + index * 50}>
+
                       <Card
+                        component="button"
+                        onClick={() => navigate(post?.titleURL, { state: { title: post?.title, id: post?.id } })}
                         sx={{
-                          borderRadius: 2,
-                          boxShadow: "0px 4px 12px 2px rgba(0, 0, 0, 0.2)",
-                          height: "500px",
-                          display: "flex",
-                          flexDirection: "column",
-                          backgroundColor: "#f5f2f2",
+                          display: 'flex',
+                          flexDirection: { xs: 'column', md: 'row' },
+                          cursor: 'pointer',
+                          transition: 'transform 0.2s ease-in-out',
+                          '&:hover': {
+                            transform: 'scale(1.05)',
+                          },
+                          padding: 0,
+                          background: 'none',
+                          width: "100%",
+                          alignItems: 'stretch',
+                          borderRadius: '16px',
+                          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                          border: 'none',
+                          outline: 'none',
+                          '&:focus': {
+                            outline: 'none',
+                          },
+                          height: { xs: 'auto' }
                         }}
                       >
-                        <CardMedia component="img" height="400" sx={{px:10, py: 1}} image={post?.imageFile} alt={post?.fullName} />
-                        <CardContent sx={{ backgroundColor: 'white', flex: 1, display: "flex", flexDirection: "column" }}>
-                          <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-                            {post?.title}
+                        <CardMedia
+                          component="img"
+                          sx={{
+                            width: { xs: '100%', md: 190 },
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                            borderRadius: '8px',
+                          }}
+                          image={post?.imageFile}
+                          alt={post?.fullName}
+                        />
+
+                        <CardContent sx={{ display: 'flex', flex: 1, flexDirection: 'column', height: '100%', pl: { sm: 0, md: 10 }, p: { sm: 2 } }}>
+                          <Typography sx={{ textAlign: 'left', color: '#da3e3e', fontWeight: 700 }}>
+                            Revista
+                          </Typography>
+                          <Typography sx={{ textAlign: 'left', fontSize: 33, fontWeight: 700, mt: -1 }}>
+                            {posts[0].title}
                           </Typography>
 
                           {post?.day && post?.month && post?.year &&
-                            <Typography variant="subtitle2" gutterBottom>
-                              <CalendarTodayIcon sx={{ color: grey[800], verticalAlign: 'middle', fontSize: 20, mr: 1 }} />
-                              {post?.day} de {post.month != null ? getMonthName(post?.month) : "Sin mes"}&nbsp;
-                              <span style={{ fontStyle: "italic", fontSize: "12px" }}>
-                                {`(Publicado hace ${formatDistanceToNow(
-                                  new Date(post?.year, post?.month - 1, post?.day),
-                                  { locale: es }
-                                )})`}
-                              </span>
+                            <Typography sx={{ textAlign: "left", fontSize: 15, fontStyle: "italic", fontWeight: 500, color: "gray" }} gutterBottom>
+                              {`(Publicado hace ${formatDistanceToNow(
+                                new Date(post?.year, post?.month - 1, post?.day),
+                                { locale: es }
+                              )})`}
                             </Typography>
                           }
 
@@ -159,24 +188,28 @@ const Blog = () => {
                             {post?.fullName || getResponsableName(post?.idResponsabilidad) || "Sin Autor"}
                           </Typography>
 
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            sx={{
-                              mt: 1,
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap'
-                            }}
-                          >
-                            {post?.shortDescription}
-                          </Typography>
-
-                          <Button size="small" sx={{ marginTop: 2 }} onClick={() => navigate(post?.titleURL, { state: { title: post?.title, id: post?.id } })}>
-                            Ver más información
-                          </Button>
+                          <Box sx={{ height: 100, overflow: 'hidden' }}>
+                            <Typography
+                              variant="body2"
+                              color="textSecondary"
+                              sx={{
+                                mt: 1,
+                                display: '-webkit-box',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: 4, // Ajusta el número de líneas visibles antes de cortar el texto
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                wordBreak: 'break-word',  // Para dividir palabras largas si es necesario
+                                overflowWrap: 'break-word',  // Para asegurarse de que las palabras se rompan si son demasiado largas
+                                textAlign: 'justify'
+                              }}
+                            >
+                              {post?.shortDescription}
+                            </Typography>
+                          </Box>
                         </CardContent>
                       </Card>
+
                     </Fade>
                   </Grid>
                 ))}
