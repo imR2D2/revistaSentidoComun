@@ -9,6 +9,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PersonIcon from '@mui/icons-material/Person';
 import { grey } from '@mui/material/colors';
 import { CircularProgress } from "@mui/material";
+import { Skeleton } from '@mui/material';
 
 // Navigate
 import { useNavigate } from "react-router-dom";
@@ -31,6 +32,10 @@ const getMonthName = (monthNumber) => {
   const monthObj = meses.find((m) => m[monthNumber]);
   return monthObj ? monthObj[monthNumber] : "Sin mes";
 };
+
+import IconButton from '@mui/material/IconButton';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -109,9 +114,36 @@ const Blog = () => {
 
           <Box sx={{ my: 4, p: 2 }}>
             {loading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <CircularProgress />
-              </Box>
+              <Grid container spacing={4}>
+                {/* Mostrar skeletons mientras se cargan los datos */}
+                {[...Array(5)].map((_, index) => (
+                  <Grid item xs={12} md={12} lg={12} key={index}>
+                    <Card sx={{
+                      display: 'flex', flexDirection: { xs: 'column', md: 'row' }, height: { xs: 'auto' }                      
+
+                      , background: 'none',
+
+                      borderRadius: '16px',
+                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                      border: 'none',
+                      outline: 'none',
+                      '&:focus': {
+                        outline: 'none',
+                      },
+                      
+                    }}>
+                      <Skeleton variant="rectangular" height={200} sx={{ width: { xs: '100%', md: 190 } }} />
+                      <CardContent sx={{ display: 'flex', flex: 1, flexDirection: 'column', height: '100%', pl: { sm: 0, md: 10 }, p: { sm: 2 } }}>
+                        <Skeleton variant="text" width="20%" sx={{ marginBottom: 1 }} />
+                        <Skeleton variant="text" width="80%" sx={{ marginBottom: 1 }} />
+                        <Skeleton variant="text" width="60%" sx={{ marginBottom: 1 }} />
+                        <Skeleton variant="text" width="90%" sx={{ marginBottom: 2 }} />
+                        <Skeleton variant="text" width="40%" />
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
             ) : posts.length === 0 ? (
               <Box sx={{ textAlign: "center", my: 4 }}>
                 <NotFound
@@ -123,66 +155,89 @@ const Blog = () => {
               <Grid container spacing={4}>
                 <style>{`.blog-item .react-reveal { height: 100%; } `}</style>
                 {posts?.map((post, index) => (
-                  <Grid item xs={12} md={6} lg={4} key={index} className="blog-item">
-                    <Fade up delay={400 + index * 50}>
-                      <Card
+                  <Grid item xs={12} md={12} lg={12} key={index} className="blog-item">
+                    {/* Aquí va el código original de los posts */}
+                    <Card
+                      component="button"
+                      onClick={() => navigate(post?.titleURL, { state: { title: post?.title, id: post?.id } })}
+                      sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', md: 'row' },
+                        cursor: 'pointer',
+                        transition: 'transform 0.2s ease-in-out',
+                        '&:hover': {
+                          transform: 'scale(1.05)',
+                        },
+                        padding: 0,
+                        background: 'none',
+                        width: "100%",
+                        alignItems: 'stretch',
+                        borderRadius: '16px',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                        border: 'none',
+                        outline: 'none',
+                        '&:focus': {
+                          outline: 'none',
+                        },
+                        height: { xs: 'auto' }
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
                         sx={{
-                          borderRadius: 2,
-                          boxShadow: "0px 4px 12px 2px rgba(0, 0, 0, 0.2)",
-                          height: "500px",
-                          display: "flex",
-                          flexDirection: "column",
-                          backgroundColor: "#f5f2f2",
+                          width: { xs: '100%', md: 190 },
+                          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                          borderRadius: '8px',
                         }}
-                      >
-                        <CardMedia component="img" height="400" sx={{px:10, py: 1}} image={post?.imageFile} alt={post?.fullName} />
-                        <CardContent sx={{ backgroundColor: 'white', flex: 1, display: "flex", flexDirection: "column" }}>
-                          <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-                            {post?.title}
+                        image={post?.imageFile}
+                        alt={post?.fullName}
+                      />
+                      <CardContent sx={{ display: 'flex', flex: 1, flexDirection: 'column', height: '100%', pl: { sm: 0, md: 10 }, p: { sm: 2 } }}>
+                        <Typography sx={{ textAlign: 'left', color: '#da3e3e', fontWeight: 700 }}>
+                          Revista
+                        </Typography>
+
+                        <Typography sx={{ textAlign: 'left', fontSize: 33, fontWeight: 700, mt: -1 }}>
+                          {post?.title}
+                        </Typography>
+
+                        {post?.day && post?.month && post?.year &&
+                          <Typography sx={{ textAlign: "left", fontSize: 15, fontStyle: "italic", fontWeight: 500, color: "gray" }} gutterBottom>
+                            {`(Publicado hace ${formatDistanceToNow(
+                              new Date(post?.year, post?.month - 1, post?.day),
+                              { locale: es }
+                            )})`}
                           </Typography>
+                        }
 
-                          {post?.day && post?.month && post?.year &&
-                            <Typography variant="subtitle2" gutterBottom>
-                              <CalendarTodayIcon sx={{ color: grey[800], verticalAlign: 'middle', fontSize: 20, mr: 1 }} />
-                              {post?.day} de {post.month != null ? getMonthName(post?.month) : "Sin mes"}&nbsp;
-                              <span style={{ fontStyle: "italic", fontSize: "12px" }}>
-                                {`(Publicado hace ${formatDistanceToNow(
-                                  new Date(post?.year, post?.month - 1, post?.day),
-                                  { locale: es }
-                                )})`}
-                              </span>
-                            </Typography>
-                          }
-
-                          <Typography variant="subtitle2" gutterBottom>
-                            <PersonIcon sx={{ color: grey[800], verticalAlign: 'middle', fontSize: 20, mr: 1 }} />
-                            {post?.fullName || getResponsableName(post?.idResponsabilidad) || "Sin Autor"}
-                          </Typography>
-
+                        <Box sx={{ height: 100, overflow: 'hidden', mt: 2 }}>
                           <Typography
-                            variant="body2"
                             color="textSecondary"
                             sx={{
                               mt: 1,
+                              fontSize: 16,
+                              fontWeight: 500,
+                              display: '-webkit-box',
+                              WebkitBoxOrient: 'vertical',
+                              WebkitLineClamp: 4, // Ajusta el número de líneas visibles antes de cortar el texto
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap'
+                              wordBreak: 'break-word',  // Para dividir palabras largas si es necesario
+                              overflowWrap: 'break-word',  // Para asegurarse de que las palabras se rompan si son demasiado largas
+                              textAlign: 'justify'
                             }}
                           >
                             {post?.shortDescription}
                           </Typography>
-
-                          <Button size="small" sx={{ marginTop: 2 }} onClick={() => navigate(post?.titleURL, { state: { title: post?.title, id: post?.id } })}>
-                            Ver más información
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    </Fade>
+                        </Box>
+                      </CardContent>
+                    </Card>
                   </Grid>
                 ))}
               </Grid>
             )}
           </Box>
+
 
           {selectedPost && (
             <CustomModal
