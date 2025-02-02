@@ -16,6 +16,7 @@ import YearsButtons from "@components/global/button/YearsButtons";
 import NotFound from "@global/text/NotFound";
 import FilterCollapse from "@components/global/filters/FilterCollapse";
 import PaginationTemplate from "@components/academia/Pagination";
+import FloatingButton from '@components/global/button/FloatingButton';
 
 // Constants
 import meses from "@data/constants/date";
@@ -269,8 +270,11 @@ const Blog = () => {
               <Typography variant="body1">{selectedPost.largeDescription}</Typography>
             </CustomModal>
           )}
+
         </>
       </Fade>
+      <FloatingButton onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} icon="northicon" label="Subir" />
+
     </Container>
   );
 };
