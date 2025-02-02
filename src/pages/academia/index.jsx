@@ -64,6 +64,10 @@ const Blog = () => {
     // eslint-disable-next-line
   }, [selectedYear, selectedMonth, page]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [selectedYear, selectedMonth]);
+
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedPost(null);
