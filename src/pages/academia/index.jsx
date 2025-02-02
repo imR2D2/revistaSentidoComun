@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
 
 // Material UI
-import { Container, Grid, Typography, Box, Card, CardContent, CardMedia, Button } from "@mui/material";
+import { Container, Grid, Typography, Box, Card, CardContent, CardMedia } from "@mui/material";
 import { Fade } from "@successtar/react-reveal";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import PersonIcon from '@mui/icons-material/Person';
-import { grey } from '@mui/material/colors';
-import { CircularProgress } from "@mui/material";
 import { Skeleton } from '@mui/material';
 
 // Navigate
@@ -19,10 +15,11 @@ import CustomModal from "@components/global/modal/Modal";
 import YearsButtons from "@components/global/button/YearsButtons";
 import NotFound from "@global/text/NotFound";
 import FilterCollapse from "@components/global/filters/FilterCollapse";
+import PaginationTemplate from "@components/academia/Pagination";
+import FloatingButton from '@components/global/button/FloatingButton';
 
 // Constants
 import meses from "@data/constants/date";
-import { AuthorsSelect } from "@data/constants/academia";
 
 // Helpers Firebase 
 import { getData } from "@utils/firebase/firebaseHelpers";
@@ -32,10 +29,6 @@ const getMonthName = (monthNumber) => {
   const monthObj = meses.find((m) => m[monthNumber]);
   return monthObj ? monthObj[monthNumber] : "Sin mes";
 };
-
-import IconButton from '@mui/material/IconButton';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -47,17 +40,20 @@ const Blog = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [loading, setLoading] = useState(true);
 
-  console.log(selectedYear, selectedMonth);
+  const [page, setPage] = useState(1);
+  const pageSize = 1
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
 
-      const result = await getData(selectedYear, selectedMonth);
+      const result = await getData(selectedYear, selectedMonth, pageSize, page);
       console.log(result, 'datos')
 
       if (result.success) {
-        setPosts(result.data);
+        setPosts(result?.data);
+        setTotal(result?.pagination?.totalRecords)
       } else {
         console.error("Error fetching data:", result.message);
       }
@@ -65,13 +61,30 @@ const Blog = () => {
     };
 
     fetchPosts();
+    // eslint-disable-next-line
+  }, [selectedYear, selectedMonth, page]);
+
+  useEffect(() => {
+    setPage(1);
   }, [selectedYear, selectedMonth]);
 
-  // Filtrar posts por el año y mes seleccionados
-  const getResponsableName = (idResponsabilidad) => {
-    const option = AuthorsSelect.find(option => option.value === idResponsabilidad);
-    return option ? option.label : "Sin responsable";
-  };
+  // Ajustar la altura del iframe
+  useEffect(() => {
+    const updateIframeHeight = () => {
+      const height = document.documentElement.scrollHeight || document.body.scrollHeight;
+      window.parent.postMessage({ type: 'SET_IFRAME_HEIGHT', height }, '*');
+    };
+
+    // Actualiza la altura cuando el contenido se cargue o cambie
+    updateIframeHeight();
+
+    // Puedes agregar un listener para cambios en el contenido si es necesario
+    window.addEventListener('resize', updateIframeHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateIframeHeight);
+    };
+  }, []);
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -91,6 +104,10 @@ const Blog = () => {
       icon: "facebook",
     },
   ];
+
+  const handlePaginationChange = ({ page }) => {
+    setPage(page);
+  };
 
   return (
     <Container id="Blog" component="section" maxWidth="xl" sx={{ pt: 4, mt: 7 }}>
@@ -112,6 +129,15 @@ const Blog = () => {
             />
           </FilterCollapse>
 
+          {total !== 0 &&
+            <PaginationTemplate
+              handlePagination={handlePaginationChange}
+              page={page}
+              pageSize={pageSize}
+              total={total}
+            />
+          }
+
           <Box sx={{ my: 4, p: 2 }}>
             {loading ? (
               <Grid container spacing={4}>
@@ -119,10 +145,10 @@ const Blog = () => {
                 {[...Array(5)].map((_, index) => (
                   <Grid item xs={12} md={12} lg={12} key={index}>
                     <Card sx={{
-                      display: 'flex', flexDirection: { xs: 'column', md: 'row' }, height: { xs: 'auto' }                      
-
-                      , background: 'none',
-
+                      display: 'flex',
+                      flexDirection: { xs: 'column', md: 'row' },
+                      height: { xs: 'auto' },
+                      background: 'none',
                       borderRadius: '16px',
                       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                       border: 'none',
@@ -130,7 +156,7 @@ const Blog = () => {
                       '&:focus': {
                         outline: 'none',
                       },
-                      
+
                     }}>
                       <Skeleton variant="rectangular" height={200} sx={{ width: { xs: '100%', md: 190 } }} />
                       <CardContent sx={{ display: 'flex', flex: 1, flexDirection: 'column', height: '100%', pl: { sm: 0, md: 10 }, p: { sm: 2 } }}>
@@ -238,6 +264,14 @@ const Blog = () => {
             )}
           </Box>
 
+          {total !== 0 &&
+            <PaginationTemplate
+              handlePagination={handlePaginationChange}
+              page={page}
+              pageSize={pageSize}
+              total={total}
+            />
+          }
 
           {selectedPost && (
             <CustomModal
@@ -253,9 +287,11 @@ const Blog = () => {
                 {selectedPost.day} {selectedPost.month != null ? getMonthName(selectedPost.month) : "Sin mes"}{" "}
                 - {selectedPost.year}
               </Typography>
-              <Typography variant="body1">{selectedPost.largeDescription}</Typography>
+              <div dangerouslySetInnerHTML={{ __html: selectedPost?.content }} />
             </CustomModal>
           )}
+
+          <FloatingButton />
         </>
       </Fade>
     </Container>

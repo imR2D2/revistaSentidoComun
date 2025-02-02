@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
-
-// Material UI
 import { Box, Fab, Icon, Tooltip } from "@mui/material";
+import { useState, useEffect } from "react";
 
 const FloatingButton = ({
   onClick = () => {},
@@ -13,20 +12,48 @@ const FloatingButton = ({
   iconColor,
   sx = {},
 }) => {
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Comprobar la posición del scroll
+      if (window.scrollY > 10) {
+        setShowButton(true); // Mostrar el botón después de 10px de desplazamiento
+      } else {
+        setShowButton(false); // Ocultar el botón si el scroll está por debajo de 10px
+      }
+    };
+
+    // Agregar el evento de scroll
+    window.addEventListener("scroll", handleScroll);
+
+    // Limpiar el evento al desmontar el componente
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <Box position={"fixed"} bottom={"24px"} right={"24px"} zIndex={10} sx={sx}>
-      <Tooltip title={label} disableInteractive arrow>
-        <Fab
-          size={"small"}
-          aria-label={label}
-          color="primaryDark"
-          sx={{ backgroundColor: color, "&:hover": { backgroundColor: colorHover } }}
-          onClick={onClick}
-        >
-          <Icon sx={{ fontSize: iconSize, color: iconColor ?? "#ffffff" }}>{icon}</Icon>
-        </Fab>
-      </Tooltip>
-    </Box>
+    showButton && (
+      <Box position={"fixed"} bottom={"24px"} right={"24px"} zIndex={10} sx={sx}>
+        <Tooltip title={label} disableInteractive arrow>
+          <Fab
+            size={"small"}
+            aria-label={label}
+            color="primaryDark"
+            sx={{
+              backgroundColor: color,
+              "&:hover": { backgroundColor: colorHover },
+            }}
+            onClick={onClick}
+          >
+            <Icon sx={{ fontSize: iconSize, color: iconColor ?? "#ffffff", fontWeight: 600 }}>
+              {icon}
+            </Icon>
+          </Fab>
+        </Tooltip>
+      </Box>
+    )
   );
 };
 

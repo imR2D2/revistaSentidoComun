@@ -1,8 +1,8 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { addDoc, collection, getDocs, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { addDoc, collection, getDocs, doc, getDoc, updateDoc, deleteDoc, getCountFromServer } from 'firebase/firestore';
 import { imgDB, txtDB } from '@utils/firebase/firebase.config';
 import { v4 as uuidv4 } from 'uuid';
-import { query, where, orderBy } from 'firebase/firestore';
+import { query, where, orderBy, limit, startAfter } from 'firebase/firestore';
 
 // Función para subir datos a Firebase
 export const uploadDataToFirebase = async (File, FilePdf, FullName, ShortDescription, Location, Year, Month, Day, Link, Responsibility, Title, TitleURL, Content, DateValue, EducationHistory) => {
@@ -47,30 +47,48 @@ export const uploadDataToFirebase = async (File, FilePdf, FullName, ShortDescrip
 };
 
 // Función para obtener todos los datos
-export const getData = async (year, month) => {
+let lastVisible = null; // Variable para manejar el último documento visible
+
+// Función para obtener todos los datos con paginación
+export const getData = async (year, month, pageSize, page) => {
     try {
         const valRef = collection(txtDB, 'c27_blog');
-
-        // Filtramos por el año y mes si se pasan como parámetros
         let q = query(valRef, orderBy("date", "desc"));
-        
-        if (year) {
-            q = query(q, where("year", "==", year));
-        }
 
-        if (month) {
-            q = query(q, where("month", "==", month));
+        if (year) q = query(q, where("year", "==", year));
+        if (month) q = query(q, where("month", "==", month));
+
+        // Obtener el conteo total de documentos
+        const snapshot = await getCountFromServer(q);
+        const totalDocs = snapshot.data().count;
+        const totalPages = Math.ceil(totalDocs / pageSize);
+
+        // Aplicar la paginación
+        q = query(q, limit(pageSize));
+        if (page > 1 && lastVisible) {
+            q = query(q, startAfter(lastVisible));
         }
 
         const dataDB = await getDocs(q);
 
+        // Actualizar el último documento visible
+        lastVisible = dataDB.docs[dataDB.docs.length - 1] || null;
+
         const allData = dataDB.docs.map(val => ({ ...val.data(), id: val.id }));
-        return { success: true, data: allData };
+
+        return {
+            success: true,
+            data: allData,
+            pagination: {
+                currentPage: page,
+                totalPages: totalPages,
+                totalRecords: totalDocs
+            }
+        };
     } catch (error) {
         return { success: false, message: error.message };
     }
 };
-
 
 // Función para obtener datos por ID
 export const getDataById = async (id) => {
