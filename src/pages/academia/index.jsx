@@ -68,6 +68,24 @@ const Blog = () => {
     setPage(1);
   }, [selectedYear, selectedMonth]);
 
+  // Ajustar la altura del iframe
+  useEffect(() => {
+    const updateIframeHeight = () => {
+      const height = document.documentElement.scrollHeight || document.body.scrollHeight;
+      window.parent.postMessage({ type: 'SET_IFRAME_HEIGHT', height }, '*');
+    };
+
+    // Actualiza la altura cuando el contenido se cargue o cambie
+    updateIframeHeight();
+
+    // Puedes agregar un listener para cambios en el contenido si es necesario
+    window.addEventListener('resize', updateIframeHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateIframeHeight);
+    };
+  }, []);
+
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedPost(null);
@@ -255,7 +273,6 @@ const Blog = () => {
             />
           }
 
-
           {selectedPost && (
             <CustomModal
               open={modalOpen}
@@ -270,21 +287,13 @@ const Blog = () => {
                 {selectedPost.day} {selectedPost.month != null ? getMonthName(selectedPost.month) : "Sin mes"}{" "}
                 - {selectedPost.year}
               </Typography>
-              <Typography variant="body1">{selectedPost.largeDescription}</Typography>
+              <div dangerouslySetInnerHTML={{ __html: selectedPost?.content }} />
             </CustomModal>
           )}
 
+          <FloatingButton />
         </>
       </Fade>
-      <FloatingButton
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        icon="northicon"
-        label="Subir"
-        color="rgb(2, 105, 116)"
-        colorHover="rgb(2, 77, 85)"
-        iconSize={20}
-      />
-
     </Container>
   );
 };
