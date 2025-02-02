@@ -107,12 +107,14 @@ const Blog = () => {
             />
           </FilterCollapse>
 
-          <PaginationTemplate
-            handlePagination={handlePaginationChange}
-            page={page}
-            pageSize={pageSize}
-            total={total}
-          />
+          {total !== 0 &&
+            <PaginationTemplate
+              handlePagination={handlePaginationChange}
+              page={page}
+              pageSize={pageSize}
+              total={total}
+            />
+          }
 
           <Box sx={{ my: 4, p: 2 }}>
             {loading ? (
@@ -239,6 +241,15 @@ const Blog = () => {
               </Grid>
             )}
           </Box>
+
+          {total !== 0 &&
+            <PaginationTemplate
+              handlePagination={handlePaginationChange}
+              page={page}
+              pageSize={pageSize}
+              total={total}
+            />
+          }
 
 
           {selectedPost && (

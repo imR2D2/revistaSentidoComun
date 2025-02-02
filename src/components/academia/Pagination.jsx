@@ -5,9 +5,9 @@ import { Box, Pagination } from '@mui/material';
 
 const PaginationTemplate = (props) => {
   const {
-    handlePagination = () => {},
+    handlePagination = () => { },
     page = 0,
-    pageSize = 2  ,
+    pageSize = 2,
     total = 0,
     showFirstButton = false,
     showLastButton = false,
@@ -19,7 +19,16 @@ const PaginationTemplate = (props) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', ...sx }}>
       <Pagination
-        count={totalPages}
+        sx={{
+          '& .MuiPaginationItem-root': {
+            color: 'black',
+            backgroundColor: 'white',
+            '&.Mui-selected': {
+              backgroundColor: 'rgb(0,96,107)',
+              color: 'white',
+            },
+          },
+        }} count={totalPages}
         page={page}
         onChange={(e, value) => handlePagination({ page: value })}
         showFirstButton={showFirstButton}
