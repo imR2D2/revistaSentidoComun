@@ -27,6 +27,8 @@ const PaginationTemplate = (props) => {
               backgroundColor: 'rgb(0,96,107)',
               color: 'white',
             },
+            fontWeight: 600,
+            fontSize: 12
           },
         }} count={totalPages}
         page={page}
