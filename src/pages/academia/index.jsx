@@ -83,7 +83,6 @@ const Blog = () => {
     },
   ];
 
-
   const handlePaginationChange = ({ page }) => {
     setPage(page);
   };
@@ -124,10 +123,10 @@ const Blog = () => {
                 {[...Array(5)].map((_, index) => (
                   <Grid item xs={12} md={12} lg={12} key={index}>
                     <Card sx={{
-                      display: 'flex', flexDirection: { xs: 'column', md: 'row' }, height: { xs: 'auto' }
-
-                      , background: 'none',
-
+                      display: 'flex',
+                      flexDirection: { xs: 'column', md: 'row' },
+                      height: { xs: 'auto' },
+                      background: 'none',
                       borderRadius: '16px',
                       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                       border: 'none',
@@ -273,7 +272,14 @@ const Blog = () => {
 
         </>
       </Fade>
-      <FloatingButton onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} icon="northicon" label="Subir" />
+      <FloatingButton
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        icon="northicon"
+        label="Subir"
+        color="rgb(2, 105, 116)"
+        colorHover="rgb(2, 77, 85)"
+        iconSize={20}
+      />
 
     </Container>
   );

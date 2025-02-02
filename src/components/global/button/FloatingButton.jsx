@@ -47,7 +47,7 @@ const FloatingButton = ({
             }}
             onClick={onClick}
           >
-            <Icon sx={{ fontSize: iconSize, color: iconColor ?? "#ffffff" }}>
+            <Icon sx={{ fontSize: iconSize, color: iconColor ?? "#ffffff", fontWeight: 600 }}>
               {icon}
             </Icon>
           </Fab>
