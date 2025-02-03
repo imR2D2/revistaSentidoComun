@@ -63,6 +63,7 @@ const TemplateAcademia = () => {
   const [open, setOpen] = useState(false);
   const [post, setPost] = useState(null);
 
+
   useEffect(() => {
     getNew();
     // eslint-disable-next-line
@@ -72,6 +73,7 @@ const TemplateAcademia = () => {
     try {
       setIsLoading(true);
       const result = await getDataByTitleAndId(titleURL, locations?.state?.id);
+      console.log(result)
       if (result.success) {
         setNoticia(result.data[0]);
       } else {
@@ -114,11 +116,31 @@ const TemplateAcademia = () => {
     return option ? option.label : "Sin responsable";
   };
 
+  const [currentPage, setCurrentPage] = useState(1); // Página actual
   const [numPages, setNumPages] = useState();
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
+
+  const handleNextPage = () => {
+    if (currentPage < numPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleDownloadPDF = () => {
+    const link = document.createElement('a');
+    link.href = pdf;
+    link.download = "revista.pdf";
+    link.click();
+  };
 
   return (
     <>
@@ -126,42 +148,6 @@ const TemplateAcademia = () => {
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <IconButton onClick={() => navigate(-1)}>
             <Icon>arrow_back</Icon>
-          </IconButton>
-        </Box>
-
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2 }}>
-          <HTMLFlipBook width={width > 500 ? 400 : 200} height={width > 500 ? 600 : 300}>
-            {
-              [...Array(numPages).keys()].map((pNum) => (
-                <Pages key={pNum} number={pNum + 1}>
-                  <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-                    <Page pageNumber={pNum + 1} width={width > 500 ? 400 : 200} renderAnnotationLayer={false} renderTextLayer={false} />
-                  </Document>
-                </Pages>
-              ))
-            }
-          </HTMLFlipBook>
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 2,
-            mt: 2,
-          }}
-        >
-          <IconButton >
-            <ArrowBack />
-          </IconButton>
-
-          <IconButton >
-            <DownloadIcon />
-          </IconButton>
-
-          <IconButton>
-            <ArrowForward />
           </IconButton>
         </Box>
 
@@ -220,10 +206,15 @@ const TemplateAcademia = () => {
                 gap: 1,
                 mt: 20,
                 width: { xs: '90%', md: '70%' },
-                margin: '0 auto'
+                margin: '0 auto',
+                backgroundColor: 'red'
               }}
             >
-              <Typography variant="h1" sx={{ fontSize: { xs: 40, md: 60 }, textAlign: 'center', width: '100%' }}>
+              <Typography sx={{ fontSize: { xs: 40, md: 18, fontWeight: 600, color: "#da3e3e" }, textAlign: 'center', width: '100%' }}>
+                Revista
+              </Typography>
+
+              <Typography sx={{ fontSize: { xs: 40, md: 60, fontWeight: 700 }, textAlign: 'center', width: '100%' }}>
                 {title}
               </Typography>
 
@@ -277,6 +268,42 @@ const TemplateAcademia = () => {
 
               <Box sx={{ display: 'flex', justifyContent: 'center', width: { xs: '90%', md: '75%' }, margin: '0 auto', mt: 2 }}>
                 <Divider sx={{ width: '100%', borderBottomWidth: 2 }} />
+              </Box>
+
+              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2 }}>
+                <HTMLFlipBook width={width > 500 ? 400 : 200} height={width > 500 ? 600 : 300}>
+                  {
+                    [...Array(numPages).keys()].map((pNum) => (
+                      <Pages key={pNum} number={pNum + 1}>
+                        <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+                          <Page pageNumber={pNum + 1} width={width > 500 ? 400 : 200} renderAnnotationLayer={false} renderTextLayer={false} />
+                        </Document>
+                      </Pages>
+                    ))
+                  }
+                </HTMLFlipBook>
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 2,
+                  mt: 2,
+                }}
+              >
+                <IconButton onClick={handlePrevPage}>
+                  <ArrowBack />
+                </IconButton>
+
+                <IconButton onClick={handleDownloadPDF}>
+                  <DownloadIcon />
+                </IconButton>
+
+                <IconButton onClick={handleNextPage}>
+                  <ArrowForward />
+                </IconButton>
               </Box>
 
               <CardMedia
