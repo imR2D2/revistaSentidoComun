@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { query, where, orderBy, limit, startAfter } from 'firebase/firestore';
 
 // Función para subir datos a Firebase
-export const uploadDataToFirebase = async (File, FilePdf, FullName, ShortDescription, Location, Year, Month, Day, Link, Responsibility, Title, TitleURL, Content, DateValue, EducationHistory) => {
+export const uploadDataToFirebase = async (File, FilePdf, FullName, ShortDescription, Location, Year, Month, Day, Link, Responsibility, Title, TitleURL, Content, DateValue) => {
     const imgs = ref(imgDB, `Imgs/${uuidv4()}`);
     const pdfs = ref(imgDB, `Pdfs/${uuidv4()}`);
 
@@ -37,7 +37,6 @@ export const uploadDataToFirebase = async (File, FilePdf, FullName, ShortDescrip
                 idResponsabilidad: Responsibility,
                 content: Content,
                 date: DateValue,
-                educationHistory: EducationHistory
             });
             return { success: true, message: 'Data added successfully' };
         }
@@ -122,8 +121,7 @@ export const updateDataInFirebase = async (
     Title,
     TitleURL,
     Content,
-    DateValue,
-    EducationHistory
+    DateValue
 ) => {
     const docRef = doc(txtDB, 'c27_blog', id);
 
@@ -148,8 +146,7 @@ export const updateDataInFirebase = async (
             link: Link,
             idResponsabilidad: Responsibility,
             content: Content,
-            date: DateValue,
-            educationHistory: EducationHistory,
+            date: DateValue
         };
 
         // Verificar si hay un nuevo archivo

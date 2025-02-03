@@ -15,7 +15,6 @@ import {
   Divider
 } from "@mui/material";
 import { CalendarToday as CalendarTodayIcon, Person as PersonIcon, Place as Place } from '@mui/icons-material';
-import { Email, Facebook, X, Instagram, YouTube, Telegram, Language, Reddit } from "@mui/icons-material";
 import { ArrowBack, ArrowForward, Download as DownloadIcon } from "@mui/icons-material";
 
 // Components
@@ -93,22 +92,7 @@ const TemplateAcademia = () => {
     setOpen(true);
   };
 
-  const { day, month, year, title, content, fullName, imageFile, location, educationHistory, idResponsabilidad } = noticia;
-
-  const socialIcons = {
-    1: <Language style={{ color: '' }} />,
-    2: <Facebook style={{ color: '#3b5998' }} />,
-    3: <Instagram style={{ color: '#C13584' }} />,
-    4: <Email style={{ color: 'rgba(0, 0, 0, 0.70)' }} />,
-    5: <X style={{ color: '#1DA1F2' }} />,
-    6: <YouTube style={{ color: '#FF0000' }} />,
-    7: <Telegram style={{ color: '#0088CC' }} />,
-    8: <Reddit style={{ color: 'rgb(255, 69, 0)' }} />
-  };
-
-  const handleSocialClick = (url) => {
-    window.open(url, '_blank');
-  };
+  const { day, month, year, title, content, fullName, imageFile, location, idResponsabilidad } = noticia;
 
   // Filtrar posts por el año y mes seleccionados
   const getResponsableName = (idResponsabilidad) => {
@@ -245,27 +229,9 @@ const TemplateAcademia = () => {
                   {post?.fullName || getResponsableName(idResponsabilidad) || "Sin Autor"}
                 </Typography>
               }
-
-              {
-                educationHistory.length > 0 &&
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  <Language sx={{ verticalAlign: 'middle', fontSize: 20, mr: 1 }} />
-                  <strong>Redes Sociales de Persona o Entidad Emisora: </strong>
-                </Typography>
-              }
             </Box>
 
             <Box sx={{ mt: -2 }}>
-              {!isLoading && educationHistory.length && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                  {educationHistory.map((item, index) => (
-                    <IconButton key={index} onClick={() => handleSocialClick(item.name)}>
-                      {socialIcons[item.type] || <Language />}
-                    </IconButton>
-                  ))}
-                </Box>
-              )}
-
               <Box sx={{ display: 'flex', justifyContent: 'center', width: { xs: '90%', md: '75%' }, margin: '0 auto', mt: 2 }}>
                 <Divider sx={{ width: '100%', borderBottomWidth: 2 }} />
               </Box>

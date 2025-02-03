@@ -34,7 +34,6 @@ const RegisterAcademia = () => {
     const Title = values?.Title;
     const TitleURL = generarURL(values?.Title);
     const Content = values?.Contenido;
-    const EducationHistory = values?.EducationHistory;
 
     // Validar si dateString existe y es válido
     if (!dateString || isNaN(Date.parse(dateString))) {
@@ -66,8 +65,7 @@ const RegisterAcademia = () => {
         Title,
         TitleURL,
         Content,
-        DateValue,
-        EducationHistory
+        DateValue
       );
 
       if (result.success) {
