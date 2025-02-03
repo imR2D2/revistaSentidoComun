@@ -16,7 +16,6 @@ import YearsButtons from "@components/global/button/YearsButtons";
 import NotFound from "@global/text/NotFound";
 import FilterCollapse from "@components/global/filters/FilterCollapse";
 import PaginationTemplate from "@components/academia/Pagination";
-import FloatingButton from '@components/global/button/FloatingButton';
 
 // Constants
 import meses from "@data/constants/date";
@@ -130,12 +129,14 @@ const Blog = () => {
           </FilterCollapse>
 
           {total !== 0 &&
-            <PaginationTemplate
-              handlePagination={handlePaginationChange}
-              page={page}
-              pageSize={pageSize}
-              total={total}
-            />
+            <Box sx={{ mt: 3 }}>
+              <PaginationTemplate
+                handlePagination={handlePaginationChange}
+                page={page}
+                pageSize={pageSize}
+                total={total}
+              />
+            </Box>
           }
 
           <Box sx={{ my: 4, p: 2 }}>
@@ -290,8 +291,6 @@ const Blog = () => {
               <div dangerouslySetInnerHTML={{ __html: selectedPost?.content }} />
             </CustomModal>
           )}
-
-          <FloatingButton />
         </>
       </Fade>
     </Container>

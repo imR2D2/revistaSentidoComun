@@ -1,9 +1,6 @@
 export const AuthorsSelect = [
   { value: 0, label: "Otro" },
-  { value: 1, label: "Arturo Hernández Bueno" },
-  { value: 2, label: "Francisco Javier Rivera" },
-  { value: 3, label: "Bertin Venancio Rivas" },
-  { value: 4, label: "Lorena Carrillo" },
+  { value: 1, label: "Sentido Común" }
 ];
 
 export const socialNetworksSelect = [

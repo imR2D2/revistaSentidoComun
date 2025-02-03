@@ -14,7 +14,7 @@ import {
   IconButton,
   Divider
 } from "@mui/material";
-import { CalendarToday as CalendarTodayIcon, Person as PersonIcon, Place as Place } from '@mui/icons-material';
+import { Place as Place } from '@mui/icons-material';
 import { ArrowBack, ArrowForward, Download as DownloadIcon } from "@mui/icons-material";
 
 // Components
@@ -87,14 +87,8 @@ const TemplateAcademia = () => {
     }
   };
 
-  const handleViewImage = ({ imageFile, Titulo }) => {
-    setPost({ imageFile, Titulo });
-    setOpen(true);
-  };
-
   const { day, month, year, title, content, fullName, imageFile, location, idResponsabilidad } = noticia;
 
-  // Filtrar posts por el año y mes seleccionados
   const getResponsableName = (idResponsabilidad) => {
     const option = AuthorsSelect.find(option => option.value === idResponsabilidad);
     return option ? option.label : "Sin responsable";
@@ -190,8 +184,7 @@ const TemplateAcademia = () => {
                 gap: 1,
                 mt: 20,
                 width: { xs: '90%', md: '70%' },
-                margin: '0 auto',
-                backgroundColor: 'red'
+                margin: '0 auto'
               }}
             >
               <Typography sx={{ fontSize: { xs: 40, md: 18, fontWeight: 600, color: "#da3e3e" }, textAlign: 'center', width: '100%' }}>
@@ -203,15 +196,6 @@ const TemplateAcademia = () => {
               </Typography>
 
               {
-                day && month && year &&
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  <CalendarTodayIcon sx={{ verticalAlign: 'middle', fontSize: 20, mr: 1 }} />
-                  <strong>Fecha de Emisión: </strong>
-                  {`${day}/${month}/${year}`}
-                </Typography>
-              }
-
-              {
                 location &&
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   <Place sx={{ verticalAlign: 'middle', fontSize: 20, mr: 1 }} />
@@ -220,21 +204,51 @@ const TemplateAcademia = () => {
                 </Typography>
               }
 
-              {
-                post?.fullName || idResponsabilidad &&
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  <PersonIcon sx={{ verticalAlign: 'middle', fontSize: 20, mr: 1 }} />
-                  <strong>Persona o Entidad Emisora: </strong>
-
-                  {post?.fullName || getResponsableName(idResponsabilidad) || "Sin Autor"}
-                </Typography>
-              }
+              <Box sx={{ display: 'inline-flex', gap: 2, alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                {
+                  fullName || idResponsabilidad &&
+                  <Typography variant="body2" color="text.secondary" gutterBottom sx={{ display: 'inline' }}>
+                    <strong>Por: </strong>
+                    {
+                      idResponsabilidad === 1 ? (
+                        <a
+                          href="https://www.youtube.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color: 'black',
+                            textDecoration: 'none'
+                          }}
+                          onMouseOver={(e) => e.target.style.color = 'green'}
+                          onMouseOut={(e) => e.target.style.color = 'black'}
+                        >
+                          {fullName || getResponsableName(idResponsabilidad) || "Sin Autor"}
+                        </a>
+                      ) : (
+                        fullName || getResponsableName(idResponsabilidad) || "Sin Autor"
+                      )
+                    }
+                  </Typography>
+                }
+                {
+                  day && month && year &&
+                  <Typography variant="body2" color="text.secondary" gutterBottom sx={{ display: 'inline' }}>
+                    <strong>Fecha: </strong>
+                    {`${day}/${month}/${year}`}
+                  </Typography>
+                }
+              </Box>
             </Box>
 
-            <Box sx={{ mt: -2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'center', width: { xs: '90%', md: '75%' }, margin: '0 auto', mt: 2 }}>
-                <Divider sx={{ width: '100%', borderBottomWidth: 2 }} />
-              </Box>
+            <Box>
+              <Divider
+                sx={{
+                  height: 3,
+                  background: "linear-gradient(to right, transparent, rgb(236, 238, 240), transparent)",
+                  border: "none",
+                  my: 3
+                }}
+              />
 
               <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2 }}>
                 <HTMLFlipBook width={width > 500 ? 400 : 200} height={width > 500 ? 600 : 300}>
@@ -272,15 +286,6 @@ const TemplateAcademia = () => {
                 </IconButton>
               </Box>
 
-              <CardMedia
-                component="img"
-                height="400"
-                width="400"
-                image={imageFile}
-                alt={fullName}
-                onClick={() => (imageFile ? handleViewImage({ imageFile, fullName }) : {})}
-                sx={{ cursor: imageFile ? "pointer" : "auto", my: 8, objectFit: "contain" }}
-              />
               <HtmlText content={content} sx={{ mt: 2 }} />
             </Box>
           </>
