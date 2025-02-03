@@ -129,11 +129,18 @@ const TemplateAcademia = () => {
   };
 
   const handleDownloadPDF = () => {
-    const link = document.createElement('a');
-    link.href = noticia.pdfFile;
-    link.download = "revista.pdf";
-    link.click();
+    if (noticia.pdfFile) {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(new Blob([pdfData], { type: 'application/pdf' }));
+      link.download = "revista.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      console.error("No PDF file available");
+    }
   };
+  
 
   return (
     <>
