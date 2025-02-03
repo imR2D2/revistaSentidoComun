@@ -14,7 +14,6 @@ import {
   IconButton,
   Divider
 } from "@mui/material";
-import { Place as Place } from '@mui/icons-material';
 import { ArrowBack, ArrowForward, Download as DownloadIcon } from "@mui/icons-material";
 
 // Components
@@ -33,7 +32,6 @@ import { AuthorsSelect } from "@data/constants/academia";
 
 import HTMLFlipBook from 'react-pageflip';
 import { Document, Page, pdfjs } from 'react-pdf';
-import pdf from './prueba.pdf';
 import useWindowDimensions from '@hooks/useWindowDimensions';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -87,6 +85,23 @@ const TemplateAcademia = () => {
     }
   };
 
+  const [pdfData, setPdfData] = useState(null);
+
+
+  useEffect(() => {
+    const fetchPdf = async () => {
+      try {
+        const response = await fetch(noticia.pdfFile);
+        const blob = await response.blob();
+        setPdfData(blob);
+      } catch (error) {
+        console.error('Error fetching PDF:', error);
+      }
+    };
+
+    fetchPdf();
+  }, [noticia]);
+
   const { day, month, year, title, content, fullName, imageFile, location, idResponsabilidad } = noticia;
 
   const getResponsableName = (idResponsabilidad) => {
@@ -115,7 +130,7 @@ const TemplateAcademia = () => {
 
   const handleDownloadPDF = () => {
     const link = document.createElement('a');
-    link.href = pdf;
+    link.href = noticia.pdfFile;
     link.download = "revista.pdf";
     link.click();
   };
@@ -187,25 +202,18 @@ const TemplateAcademia = () => {
                 margin: '0 auto'
               }}
             >
-              <Typography sx={{ fontSize: { xs: 40, md: 18, fontWeight: 600, color: "#da3e3e" }, textAlign: 'center', width: '100%' }}>
+              <Typography sx={{ fontSize: { xs: 16, md: 18, fontWeight: 600, color: "#da3e3e" }, textAlign: 'center', width: '100%' }}>
                 Revista
               </Typography>
 
-              <Typography sx={{ fontSize: { xs: 40, md: 60, fontWeight: 700 }, textAlign: 'center', width: '100%' }}>
+              <Typography sx={{ fontSize: { xs: 30, md: 60, fontWeight: 700 }, textAlign: 'center', width: '100%' }}>
                 {title}
               </Typography>
 
-              {
-                location &&
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  <Place sx={{ verticalAlign: 'middle', fontSize: 20, mr: 1 }} />
-                  <strong>Ubicación de Emisión: </strong>
-                  {location}
-                </Typography>
-              }
 
-              <Box sx={{ display: 'inline-flex', gap: 2, alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                {
+
+              <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}>
+              {
                   fullName || idResponsabilidad &&
                   <Typography variant="body2" color="text.secondary" gutterBottom sx={{ display: 'inline' }}>
                     <strong>Por: </strong>
@@ -237,6 +245,13 @@ const TemplateAcademia = () => {
                     {`${day}/${month}/${year}`}
                   </Typography>
                 }
+                {
+                  location &&
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    <strong>Lugar de Emisión: </strong>
+                    {location}
+                  </Typography>
+                }
               </Box>
             </Box>
 
@@ -255,7 +270,7 @@ const TemplateAcademia = () => {
                   {
                     [...Array(numPages).keys()].map((pNum) => (
                       <Pages key={pNum} number={pNum + 1}>
-                        <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+                        <Document file={pdfData} onLoadSuccess={onDocumentLoadSuccess}>
                           <Page pageNumber={pNum + 1} width={width > 500 ? 400 : 200} renderAnnotationLayer={false} renderTextLayer={false} />
                         </Document>
                       </Pages>
@@ -270,7 +285,6 @@ const TemplateAcademia = () => {
                   justifyContent: "center",
                   alignItems: "center",
                   gap: 2,
-                  mt: 2,
                 }}
               >
                 <IconButton onClick={handlePrevPage}>
