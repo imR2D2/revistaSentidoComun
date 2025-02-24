@@ -23,8 +23,12 @@ export default defineConfig({
       "@services": path.resolve(__dirname, "src/services"),
       "@utils": path.resolve(__dirname, "src/utils"),
       "@hooks": path.resolve(__dirname, "src/hooks"),
-      "@modules": path.resolve(__dirname, "/node_modules"),
+      "@modules": path.resolve(__dirname, "node_modules"),
       "@styles": path.resolve(__dirname, "src/data/constants/styles"),
     },
+  },
+  base: "./wp-content/uploads/revista-digital/build/",
+  build: {
+    outDir: "build", // Cambia la carpeta de salida de dist a build
   },
 });
