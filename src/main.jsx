@@ -17,7 +17,7 @@ createRoot(document.getElementById("body")).render(
     <GlobalContextProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter>
+        <BrowserRouter basename="/wp-content/uploads/revista-digital/build">
           <Router />
         </BrowserRouter>
       </ThemeProvider>

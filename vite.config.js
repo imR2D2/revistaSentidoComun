@@ -4,6 +4,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/wp-content/uploads/revista-digital/build/",
   plugins: [react()],
   envPrefix: 'C27_',
   resolve: {
@@ -27,7 +28,6 @@ export default defineConfig({
       "@styles": path.resolve(__dirname, "src/data/constants/styles"),
     },
   },
-  base: "./wp-content/uploads/revista-digital/build/",
   build: {
     outDir: "build", // Cambia la carpeta de salida de dist a build
   },

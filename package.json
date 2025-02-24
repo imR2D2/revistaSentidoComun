@@ -7,9 +7,11 @@
   "homepage": "./wp-content/uploads/revista-digital/build/",
   "scripts": {
     "start": "vite --host",
-    "build": "vite build",
+    "build": "vite build && npm run copy-htaccess", 
+    "clean": "rimraf build",  
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "copy-htaccess": "npx ncp ./.htaccess ./build/.htaccess" 
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -59,6 +61,8 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "rimraf": "^5.0.0",  
+    "ncp": "^2.0.0"  
   }
 }
