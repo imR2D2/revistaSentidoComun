@@ -1,10 +1,10 @@
 {
-  "name": "codigo27",
-  "author": "Codigo 27",
-  "homepage": "https://www.codigo27.mx/",
+  "name": "revista",
+  "author": "Sentido Comun",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "./wp-content/uploads/revista-digital/build/",
   "scripts": {
     "start": "vite --host",
     "build": "vite build",
