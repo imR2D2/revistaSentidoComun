@@ -1,13 +1,8 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /wp-content/uploads/revista-digital/build/
+  RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^(.*)$ /wp-content/uploads/revista-digital/build/index.html [L]
-</IfModule>
-
-# Permitir que los archivos CSS y JS se sirvan correctamente
-<IfModule mod_mime.c>
-  AddType text/css .css
-  AddType application/javascript .js
+  RewriteRule . /wp-content/uploads/revista-digital/build/index.html [L]
 </IfModule>
