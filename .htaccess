@@ -1,11 +1,13 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /wp-content/uploads/revista-digital/build/
-  
-  # Permite acceder a archivos y directorios existentes
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ /wp-content/uploads/revista-digital/build/index.html [L]
+</IfModule>
 
-  # Redirige todo lo demás a index.html para que React maneje las rutas
-  RewriteRule ^(.*)$ index.html [L,QSA]
+# Permitir que los archivos CSS y JS se sirvan correctamente
+<IfModule mod_mime.c>
+  AddType text/css .css
+  AddType application/javascript .js
 </IfModule>

@@ -1,0 +1,3 @@
+sudo chmod -R 755 /var/www/html/clients/SentidoComun/revista-digital2/
+sudo chown -R ec2-user:apache /var/www/html/clients/SentidoComun/revista-digital2/
+sudo systemctl restart httpd
