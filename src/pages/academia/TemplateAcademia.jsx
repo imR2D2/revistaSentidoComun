@@ -136,20 +136,21 @@ const TemplateAcademia = () => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(text);
+    setOpen(true)
   };
 
   return (
     <>
       <Container maxWidth="xl" sx={{ mt: 10 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-          <IconButton onClick={() => navigate(-1)}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
+          <IconButton onClick={() => window.location.href = 'https://consentidocomun.mx/revista-digital/'}>
             <Icon>arrow_back</Icon>
           </IconButton>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              backgroundColor: "rgba(186, 186, 183, 0.49)",
+              backgroundColor: "rgba(228, 228, 228, 0.49)",
               borderRadius: "10px",
               padding: "8px 12px",
               maxWidth: "100%",
@@ -179,7 +180,8 @@ const TemplateAcademia = () => {
                 color: "white",
                 borderRadius: "8px",
                 marginLeft: "8px",
-                "&:hover": { backgroundColor: "#rgb(10, 44, 45)" },
+                transition: "background-color 0.3s ease",
+                "&:hover": { backgroundColor: "rgb(3, 59, 60)" },
               }}
             >
               <ContentCopyIcon fontSize="small" />
@@ -253,13 +255,11 @@ const TemplateAcademia = () => {
                 {title}
               </Typography>
 
-
-
-              <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}>
+              <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center', alignItems: 'center' }}>
                 {
                   fullName || idResponsabilidad &&
-                  <Typography variant="body2" color="text.secondary" gutterBottom sx={{ display: 'inline' }}>
-                    <strong>Por: </strong>
+                  <Typography color="text.secondary" gutterBottom sx={{ display: 'inline', fontSize: 16, fontWeight: 500 }}>
+                    <strong style={{ fontSize: 16, fontWeight: 'bold', color: 'rgb(0,90,91)' }}>Por: </strong>
                     {
                       idResponsabilidad === 1 ? (
                         <a
@@ -283,15 +283,15 @@ const TemplateAcademia = () => {
                 }
                 {
                   day && month && year &&
-                  <Typography variant="body2" color="text.secondary" gutterBottom sx={{ display: 'inline' }}>
-                    <strong>Fecha: </strong>
+                  <Typography color="text.secondary" gutterBottom sx={{ display: 'inline', fontSize: 16, fontWeight: 500 }}>
+                    <strong style={{ fontSize: 16, fontWeight: 'bold', color: 'rgb(0,90,91)' }}>Fecha: </strong>
                     {`${day}/${month}/${year}`}
                   </Typography>
                 }
                 {
                   location &&
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    <strong>Lugar de Emisión: </strong>
+                  <Typography color="text.secondary" gutterBottom sx={{ display: 'inline', fontSize: 16, fontWeight: 500 }}>
+                    <strong style={{ fontSize: 16, fontWeight: 'bold', color: 'rgb(0,90,91)' }}>Lugar de Emisión: </strong>
                     {location}
                   </Typography>
                 }
@@ -307,7 +307,6 @@ const TemplateAcademia = () => {
                   my: 3
                 }}
               />
-
               <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2 }}>
                 <HTMLFlipBook width={width > 500 ? 400 : 200} height={width > 500 ? 600 : 300}>
                   {
@@ -351,8 +350,8 @@ const TemplateAcademia = () => {
         )}
       </Container>
 
-      <Snackbar open={open} autoHideDuration={2000} onClose={() => setOpen(false)}>
-        <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: "100%" }}>
+      <Snackbar anchorOrigin={{ vertical: "top", horizontal: "center" }} open={open} autoHideDuration={2000} onClose={() => setOpen(false)}>
+        <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: "100%", backgroundColor: "rgba(107, 154, 155, 0.45)", color: "rgb(0,90,91)", fontWeight: 600 }}>
           ¡Link copiado en el portapapeles!
         </Alert>
       </Snackbar>
