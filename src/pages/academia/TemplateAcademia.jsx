@@ -6,15 +6,14 @@ import {
   Container,
   Box,
   Skeleton,
-  Card,
   Typography,
-  CardMedia,
   Icon,
-  Dialog,
   IconButton,
-  Divider
+  Divider,
+  Snackbar,
+  Alert
 } from "@mui/material";
-import { ArrowBack, ArrowForward, Download as DownloadIcon } from "@mui/icons-material";
+import { ArrowBack, ArrowForward, Download as DownloadIcon, ContentCopy as ContentCopyIcon } from "@mui/icons-material";
 
 // Components
 import NotFound from "@global/text/NotFound";
@@ -24,7 +23,6 @@ import "@global/text/htmlText.css";
 // Utils - Assets
 import { showRandom, getArray } from "@utils/utilities";
 import { isEmptyOrNullObject } from "@utils/validations";
-import defaultImage from "@assets/image_example.jpg";
 
 // Helpers Firebase
 import { getDataByTitleAndId } from "@utils/firebase/firebaseHelpers";
@@ -58,13 +56,9 @@ const TemplateAcademia = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [noticia, setNoticia] = useState({});
   const [open, setOpen] = useState(false);
-  const [post, setPost] = useState(null);
 
-
-  useEffect(() => {
-    getNew();
-    // eslint-disable-next-line
-  }, []);
+  const [currentPage, setCurrentPage] = useState(1); // Página actual
+  const [numPages, setNumPages] = useState();
 
   const getNew = async () => {
     try {
@@ -87,6 +81,12 @@ const TemplateAcademia = () => {
 
   const [pdfData, setPdfData] = useState(null);
 
+  useEffect(() => {
+    getNew();
+    // eslint-disable-next-line
+  }, []);
+
+  const { day, month, year, title, content, fullName, location, idResponsabilidad } = noticia;
 
   useEffect(() => {
     const fetchPdf = async () => {
@@ -102,15 +102,11 @@ const TemplateAcademia = () => {
     fetchPdf();
   }, [noticia]);
 
-  const { day, month, year, title, content, fullName, imageFile, location, idResponsabilidad } = noticia;
 
   const getResponsableName = (idResponsabilidad) => {
     const option = AuthorsSelect.find(option => option.value === idResponsabilidad);
     return option ? option.label : "Sin responsable";
   };
-
-  const [currentPage, setCurrentPage] = useState(1); // Página actual
-  const [numPages, setNumPages] = useState();
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -135,8 +131,12 @@ const TemplateAcademia = () => {
     link.download = "revista.pdf";
     link.click();
   };
-  
-  
+
+  const text = `https://consentidocomun.mx/wp-content/uploads/revista-digital/build/${titleURL}`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+  };
 
   return (
     <>
@@ -145,6 +145,46 @@ const TemplateAcademia = () => {
           <IconButton onClick={() => navigate(-1)}>
             <Icon>arrow_back</Icon>
           </IconButton>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "rgba(186, 186, 183, 0.49)",
+              borderRadius: "10px",
+              padding: "8px 12px",
+              maxWidth: "100%",
+              overflow: "hidden",
+              width: "40%",
+            }}
+          >
+            <Typography
+              variant="body2"
+              noWrap
+              sx={{
+                flexGrow: 1,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                color: "rgb(0,90,91)",
+                fontSize: 14,
+                fontWeight: 600
+              }}
+            >
+              {text}
+            </Typography>
+            <IconButton
+              onClick={handleCopy}
+              sx={{
+                backgroundColor: "rgb(0,90,91)",
+                color: "white",
+                borderRadius: "8px",
+                marginLeft: "8px",
+                "&:hover": { backgroundColor: "#rgb(10, 44, 45)" },
+              }}
+            >
+              <ContentCopyIcon fontSize="small" />
+            </IconButton>
+          </Box>
         </Box>
 
         {isLoading ? (
@@ -205,7 +245,7 @@ const TemplateAcademia = () => {
                 margin: '0 auto'
               }}
             >
-              <Typography sx={{ fontSize: { xs: 16, md: 18, fontWeight: 600, color: "#da3e3e" }, textAlign: 'center', width: '100%' }}>
+              <Typography sx={{ fontSize: { xs: 16, md: 28, fontWeight: 600, color: "rgb(0,90,91)" }, textAlign: 'center', width: '100%' }}>
                 Revista
               </Typography>
 
@@ -216,7 +256,7 @@ const TemplateAcademia = () => {
 
 
               <Box sx={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}>
-              {
+                {
                   fullName || idResponsabilidad &&
                   <Typography variant="body2" color="text.secondary" gutterBottom sx={{ display: 'inline' }}>
                     <strong>Por: </strong>
@@ -311,44 +351,11 @@ const TemplateAcademia = () => {
         )}
       </Container>
 
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        fullWidth
-        maxWidth="lg"
-        PaperProps={{ style: { backgroundColor: "transparent", borderRadius: "8px" } }}
-        disableEscapeKeyDown
-      >
-        <Card
-          elevation={3}
-          sx={{
-            borderRadius: "8px",
-            padding: 0,
-            minHeight: "100px",
-            overflowY: post?.FileURL ? "auto" : "none",
-            "&::-webkit-scrollbar": { width: { xs: "5px", md: "10px" }, left: 0 },
-            "&::-webkit-scrollbar-thumb": { backgroundColor: "rgba(0, 0, 0, 0.2)", borderRadius: "6px" },
-            "&::-webkit-scrollbar-track": { backgroundColor: "rgb(255, 255, 255)" },
-          }}
-        >
-          <IconButton
-            aria-label="close"
-            onClick={() => setOpen(false)}
-            sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: "inherit",
-              backgroundColor: "white",
-              "&:hover": { backgroundColor: "#bdbdbd" },
-            }}
-          >
-            <Icon>close</Icon>
-          </IconButton>
-
-          {post && <CardMedia component="img" image={imageFile ?? defaultImage} alt={title} />}
-        </Card>
-      </Dialog>
+      <Snackbar open={open} autoHideDuration={2000} onClose={() => setOpen(false)}>
+        <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: "100%" }}>
+          ¡Link copiado en el portapapeles!
+        </Alert>
+      </Snackbar>
     </>
   );
 };
