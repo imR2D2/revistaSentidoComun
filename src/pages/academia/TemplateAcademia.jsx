@@ -247,10 +247,6 @@ const TemplateAcademia = () => {
                 margin: '0 auto'
               }}
             >
-              <Typography sx={{ fontSize: { xs: 16, md: 28, fontWeight: 600, color: "rgb(0,90,91)" }, textAlign: 'center', width: '100%' }}>
-                Revista
-              </Typography>
-
               <Typography sx={{ fontSize: { xs: 30, md: 60, fontWeight: 700 }, textAlign: 'center', width: '100%' }}>
                 {title}
               </Typography>
