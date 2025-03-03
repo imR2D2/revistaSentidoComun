@@ -57,7 +57,7 @@ const TemplateAcademia = () => {
   const [noticia, setNoticia] = useState({});
   const [open, setOpen] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1); // Página actual
+  // const [currentPage, setCurrentPage] = useState(1); // Página actual
   const [numPages, setNumPages] = useState();
 
   const getNew = async () => {
@@ -112,25 +112,25 @@ const TemplateAcademia = () => {
     setNumPages(numPages);
   }
 
-  const handleNextPage = () => {
-    if (currentPage < numPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  // const handleNextPage = () => {
+  //   if (currentPage < numPages) {
+  //     setCurrentPage(currentPage + 1);
+  //   }
+  // };
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  // const handlePrevPage = () => {
+  //   if (currentPage > 1) {
+  //     setCurrentPage(currentPage - 1);
+  //   }
+  // };
 
-  const handleDownloadPDF = () => {
-    const link = document.createElement('a');
-    link.href = noticia.pdfFile;
-    link.target = '_blank'; // Esto abrirá el enlace en una nueva pestaña
-    link.download = "revista.pdf";
-    link.click();
-  };
+  // const handleDownloadPDF = () => {
+  //   const link = document.createElement('a');
+  //   link.href = noticia.pdfFile;
+  //   link.target = '_blank'; // Esto abrirá el enlace en una nueva pestaña
+  //   link.download = "revista.pdf";
+  //   link.click();
+  // };
 
   const text = `https://consentidocomun.mx/wp-content/uploads/revista-digital/build/${titleURL}`;
 
@@ -303,8 +303,14 @@ const TemplateAcademia = () => {
                   my: 3
                 }}
               />
-              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 2 }}>
-                <HTMLFlipBook width={width > 500 ? 400 : 200} height={width > 500 ? 600 : 300}>
+              <Box sx={{ overflow: "hidden", width: "100%", display: "flex", justifyContent: "center" }}>
+                <HTMLFlipBook
+                  width={width > 500 ? 400 : 200}
+                  height={width > 500 ? 600 : 300}
+                  size="stretch"
+                  maxShadowOpacity={0.5}
+                  mobileScrollSupport={true}
+                >
                   {
                     [...Array(numPages).keys()].map((pNum) => (
                       <Pages key={pNum} number={pNum + 1}>
@@ -317,7 +323,7 @@ const TemplateAcademia = () => {
                 </HTMLFlipBook>
               </Box>
 
-              <Box
+              {/* <Box
                 sx={{
                   display: "flex",
                   justifyContent: "center",
@@ -336,9 +342,11 @@ const TemplateAcademia = () => {
                 <IconButton onClick={handleNextPage}>
                   <ArrowForward />
                 </IconButton>
-              </Box>
+              </Box> */}
 
-              <HtmlText content={content} sx={{ mt: 2 }} />
+              <Box sx={{ mb: 10 }}>
+                <HtmlText content={content} />
+              </Box>
             </Box>
           </>
         ) : (
