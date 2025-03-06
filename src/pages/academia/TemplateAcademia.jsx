@@ -11,7 +11,8 @@ import {
   IconButton,
   Divider,
   Snackbar,
-  Alert
+  Alert,
+  Button
 } from "@mui/material";
 import { ArrowBack, ArrowForward, Download as DownloadIcon, ContentCopy as ContentCopyIcon } from "@mui/icons-material";
 
@@ -119,13 +120,13 @@ const TemplateAcademia = () => {
   //   }
   // };
 
-  // const handleDownloadPDF = () => {
-  //   const link = document.createElement('a');
-  //   link.href = noticia.pdfFile;
-  //   link.target = '_blank'; // Esto abrirá el enlace en una nueva pestaña
-  //   link.download = "revista.pdf";
-  //   link.click();
-  // };
+  const handleDownloadPDF = () => {
+    if (noticia.pdfFile) {
+      window.open(noticia.pdfFile, '_blank');
+    } else {
+      console.error("No se encontró el archivo PDF.");
+    }
+  };
 
   const text = `https://consentidocomun.mx/wp-content/uploads/revista-digital/build/${titleURL}`;
 
@@ -316,7 +317,7 @@ const TemplateAcademia = () => {
                 </HTMLFlipBook>
               </Box>
 
-              {/* <Box
+              <Box
                 sx={{
                   display: "flex",
                   justifyContent: "center",
@@ -324,20 +325,26 @@ const TemplateAcademia = () => {
                   gap: 2,
                 }}
               >
-                <IconButton onClick={handlePrevPage}>
-                  <ArrowBack />
-                </IconButton>
+                <Button
+                  onClick={handleDownloadPDF}
+                  sx={{
+                    backgroundColor: "rgb(0,90,91)",
+                    color: "white",
+                    padding: "8px 16px",
+                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    textTransform: "none",
+                    transition: "background-color 0.3s ease",
+                    "&:hover": { backgroundColor: "rgb(3, 59, 60)" },
+                  }}
+                  endIcon={<DownloadIcon />}
+                >
+                  Descargar PDF
+                </Button>
+              </Box>
 
-                <IconButton onClick={handleDownloadPDF}>
-                  <DownloadIcon />
-                </IconButton>
 
-                <IconButton onClick={handleNextPage}>
-                  <ArrowForward />
-                </IconButton>
-              </Box> */}
-
-              <Box sx={{ my: {xs: 5, md: 10} }}>
+              <Box sx={{ my: { xs: 5, md: 10 } }}>
                 <HtmlText content={content} />
               </Box>
             </Box>
