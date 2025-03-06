@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 // Material UI
 import {
@@ -47,10 +47,8 @@ Pages.displayName = 'Pages';
 
 const TemplateAcademia = () => {
   const { width } = useWindowDimensions();
-  console.log(width)
 
   const { titleURL } = useParams();
-  const navigate = useNavigate();
   const locations = useLocation();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -64,16 +62,13 @@ const TemplateAcademia = () => {
     try {
       setIsLoading(true);
       const result = await getDataByTitleAndId(titleURL, locations?.state?.id);
-      console.log(result)
       if (result.success) {
         setNoticia(result.data[0]);
       } else {
         setNoticia({});
-        console.error(result.message);
       }
     } catch (e) {
       setNoticia({});
-      console.error("Error fetching noticia:", e);
     } finally {
       setIsLoading(false);
     }
@@ -155,7 +150,7 @@ const TemplateAcademia = () => {
               padding: "8px 12px",
               maxWidth: "100%",
               overflow: "hidden",
-              width: "40%",
+              width: "65%",
             }}
           >
             <Typography
@@ -305,17 +300,15 @@ const TemplateAcademia = () => {
               />
               <Box sx={{ overflow: "hidden", width: "100%", display: "flex", justifyContent: "center" }}>
                 <HTMLFlipBook
-                  width={width > 500 ? 400 : 200}
-                  height={width > 500 ? 600 : 300}
-                  size="stretch"
-                  maxShadowOpacity={0.5}
-                  mobileScrollSupport={true}
+                  width={width > 500 ? 500 : 320}
+                  height={width > 500 ? 700 : 500}
+                  size={"fixed"}
                 >
                   {
                     [...Array(numPages).keys()].map((pNum) => (
                       <Pages key={pNum} number={pNum + 1}>
                         <Document file={pdfData} onLoadSuccess={onDocumentLoadSuccess}>
-                          <Page pageNumber={pNum + 1} width={width > 500 ? 400 : 200} renderAnnotationLayer={false} renderTextLayer={false} />
+                          <Page pageNumber={pNum + 1} width={width > 500 ? 500 : 320} height={width > 500 ? 700 : 400} renderAnnotationLayer={false} renderTextLayer={false} />
                         </Document>
                       </Pages>
                     ))
@@ -344,7 +337,7 @@ const TemplateAcademia = () => {
                 </IconButton>
               </Box> */}
 
-              <Box sx={{ mb: 10 }}>
+              <Box sx={{ my: {xs: 5, md: 10} }}>
                 <HtmlText content={content} />
               </Box>
             </Box>

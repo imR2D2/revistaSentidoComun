@@ -22,7 +22,6 @@ const RegisterAcademia = () => {
   const [refreshApi, setRefreshApi] = useState(false);
 
   const handleInsertData = async (values) => {
-    console.log(values);
     const File = values?.Files[0]?.file;
     const FilePdf = values?.FilesPdf[0]?.file;
     const FullName = values?.FullName;
@@ -46,8 +45,6 @@ const RegisterAcademia = () => {
     const Year = date.getFullYear();
     const Month = date.getMonth() + 1; // Los meses van de 0 a 11, se suma 1
     const Day = date.getDate();
-
-    console.log("Fecha procesada:", Date, Year, Month, Day);
 
     const DateValue = values?.Date;
     try {

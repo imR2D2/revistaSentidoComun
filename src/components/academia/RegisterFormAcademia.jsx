@@ -33,7 +33,6 @@ const RegisterFormAcademia = (props) => {
     enableReinitialize: false,
     onSubmit: async (values, actions) => {
       setIsSubmitting(true);
-      console.log(values, 'values')
       try {
         await setData(values);
         actions.resetForm();

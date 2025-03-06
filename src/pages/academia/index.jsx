@@ -48,7 +48,6 @@ const Blog = () => {
       setLoading(true);
 
       const result = await getData(selectedYear, selectedMonth, pageSize, page);
-      console.log(result, 'datos')
 
       if (result.success) {
         setPosts(result?.data);
