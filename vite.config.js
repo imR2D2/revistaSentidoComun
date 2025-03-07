@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig({
   base: "/wp-content/uploads/revista-digital/build/",
   plugins: [react()],
-  envPrefix: 'C27_',
+  envPrefix: 'SC_',
   resolve: {
     alias: {
       "@src": path.resolve(__dirname, "src"),
